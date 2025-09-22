@@ -1,3 +1,5 @@
+package elements;
+
 public class Wall extends Space {
     public Wall(int x, int y) {
         super(x, y);

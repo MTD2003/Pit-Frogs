@@ -1,3 +1,5 @@
+package elements;
+
 public class Player extends Wall {
     public Player(int x, int y) {
         super(x, y);

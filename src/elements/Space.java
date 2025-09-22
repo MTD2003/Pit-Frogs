@@ -1,3 +1,5 @@
+package elements;
+
 public class Space {
     private int x;
     private int y;
