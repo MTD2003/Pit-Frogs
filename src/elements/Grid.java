@@ -1,8 +1,8 @@
 package elements;
 
 public class Grid {
-    private int size;
-    private int actors;
+    private final int size;
+    private final int actors;
     private Space[][] spaces;
     private Player[] player;
 
@@ -36,20 +36,28 @@ public class Grid {
         }
         addPlayers();
     }
-
+    
+    // Creating and placing player objects.
     private void addPlayers() {
-        int scaling = (size / (actors - 1)) - 1;
-        System.out.println(scaling);
+        int j = 0;
         player = new Player[actors];
-        for(int i = 0; i < actors; i++) {
-            player[i] = new Player(scaling * i, scaling * i);
-            spaces[scaling * i][scaling * i] = player[i];
+        for(; j < 2; j++) { // Can guarantee min 2 players by game rules.
+            int xy = (size - 1) * j;
+            player[j] = new Player(xy, xy);
+            spaces[xy][xy].setBlocked(true);
+        }
+        for(; j < actors; j++) {
+            int x = (size - 1) * (j % 2);
+            int y = (size - 1) * (j % 3);
+            player[j] = new Player(x, y);
+            spaces[x][y].setBlocked(true);
         }
     }
 
+    // Redo this when you do the GUI.
     public boolean playerMove(int turn, int inp, boolean makePit) {
         int[] move = {0, 0}; // [0] = x, [1] = y
-        int[] ppos = player[turn].getPos(); // 
+        int[] ppos = player[turn].getPos();
         
         switch(inp) {
             case 9:
@@ -92,11 +100,11 @@ public class Grid {
             int xLast = ppos[0] - move[0];
             int yLast = ppos[1] - move[1];
             
-            spaces[ppos[0]][ppos[1]] =  spaces[xLast][yLast];
+            spaces[ppos[0]][ppos[1]].setBlocked(true);
             if(makePit)
                 spaces[xLast][yLast] = new Pit(xLast, yLast);
             else
-                spaces[xLast][yLast] = new Space(xLast, yLast);
+                spaces[xLast][yLast].setBlocked(false);
             player[turn].setPos(ppos);
 
             return true;
@@ -113,7 +121,7 @@ public class Grid {
         }
         
         Space jumpedTo = spaces[newPos[0]][newPos[1]];
-        return (jumpedTo.hitboxType() <= 2); // Returns false if space cannot be jumped to.
+        return (!jumpedTo.isBlocked()); // Returns false if space cannot be jumped to.
     }
 
     public int actorsLeft() {

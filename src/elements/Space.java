@@ -1,36 +1,24 @@
 package elements;
 
-public class Space {
-    private int x;
-    private int y;
+public class Space extends Entity {
+    private boolean blocked;
 
     public Space(int x, int y) {
-        this.x = x;
-        this.y = y;
+        super(x, y);
     }
 
-    public int getX() {
-        return x;
+    public boolean isBlocked() {
+        return blocked;
     }
 
-    public int getY() {
-        return y;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    // Returns gridType index.
-    public int hitboxType() {
-        return 0;
+    public void setBlocked(boolean blocked) {
+        this.blocked = blocked;
     }
 
     public String toString() {
-        return " ";
+        if(blocked)
+            return "P";
+        else
+            return " ";
     }
 }

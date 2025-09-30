@@ -5,10 +5,9 @@ public class Pit extends Space {
         super(x, y);
     }
 
-    // Returns gridType index.
     @Override
-    public int hitboxType() {
-        return 1;
+    public boolean isBlocked() {
+        return true;
     }
 
     public String toString() {
