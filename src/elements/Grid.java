@@ -1,4 +1,5 @@
 package elements;
+import utilities.Constants;
 
 public class Grid {
     private final int size;
@@ -29,9 +30,9 @@ public class Grid {
 
     private void buildGrid() {
         spaces = new Space[size][size];
-        for(int i = 0; i < size; i++) {
-            for(int j = 0; j < size; j++) {
-                spaces[i][j] = new Space(i, j);
+        for(int x = 0; x < size; x++) {
+            for(int y = 0; y < size; y++) {
+                spaces[x][y] = new Space(x, y);
             }
         }
         addPlayers();
@@ -48,7 +49,7 @@ public class Grid {
         }
         for(; j < actors; j++) {
             int x = (size - 1) * (j % 2);
-            int y = (size - 1) * (j % 3);
+            int y = (size - 1) * ((j + 1) % 2);
             player[j] = new Player(x, y);
             spaces[x][y].setBlocked(true);
         }
@@ -61,46 +62,46 @@ public class Grid {
         
         switch(inp) {
             case 9:
-                move[0] = 1;
-                move[1] = -1;
+                move[Constants.X] = 1;
+                move[Constants.Y] = -1;
                 break;
             case 8:
-                move[0] = 0;
-                move[1] = -1;
+                move[Constants.X] = 0;
+                move[Constants.Y] = -1;
                 break;
             case 7:
-                move[0] = -1;
-                move[1] = -1;
+                move[Constants.X] = -1;
+                move[Constants.Y] = -1;
                 break;
             case 6:
-                move[0] = 1;
-                move[1] = 0;
+                move[Constants.X] = 1;
+                move[Constants.Y] = 0;
                 break;
             case 4:
-                move[0] = -1;
-                move[1] = 0;
+                move[Constants.X] = -1;
+                move[Constants.Y] = 0;
                 break;
             case 3:
-                move[0] = 1;
-                move[1] = 1;
+                move[Constants.X] = 1;
+                move[Constants.Y] = 1;
                 break;
             case 2:
-                move[0] = 0;
-                move[1] = 1;
+                move[Constants.X] = 0;
+                move[Constants.Y] = 1;
                 break;
             case 1:
-                move[0] = -1;
-                move[1] = 1;
+                move[Constants.X] = -1;
+                move[Constants.Y] = 1;
         }
-        ppos[0] += move[0];
-        ppos[1] += move[1];
+        ppos[Constants.X] += move[Constants.X];
+        ppos[Constants.Y] += move[Constants.Y];
         
         // Moves player in direction.
         if(tryPos(ppos)) {
-            int xLast = ppos[0] - move[0];
-            int yLast = ppos[1] - move[1];
+            int xLast = ppos[Constants.X] - move[Constants.X];
+            int yLast = ppos[Constants.Y] - move[Constants.Y];
             
-            spaces[ppos[0]][ppos[1]].setBlocked(true);
+            spaces[ppos[Constants.X]][ppos[Constants.Y]].setBlocked(true);
             if(makePit)
                 spaces[xLast][yLast] = new Pit(xLast, yLast);
             else
@@ -120,7 +121,7 @@ public class Grid {
             }
         }
         
-        Space jumpedTo = spaces[newPos[0]][newPos[1]];
+        Space jumpedTo = spaces[newPos[Constants.X]][newPos[Constants.Y]];
         return (!jumpedTo.isBlocked()); // Returns false if space cannot be jumped to.
     }
 

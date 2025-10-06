@@ -1,14 +1,20 @@
-package states;
+package controllers;
 
 import elements.Grid;
 import java.util.Scanner;
+import view.*;
 
 public class Game {
-    public static void main(String[] args) throws Exception {
-        Grid gameGrid = new Grid(9);
-
+    private int scale;
+    private int key_input;
+    
+    public Game() {
+        Grid gameGrid = new Grid(7);
         Scanner scans = new Scanner(System.in);
-        
+        GameView window = new GameView();
+        GamePanel panel = new GamePanel();
+        window.addComponent(panel);
+
         int i = 0;
         int input;
         /* Diagonal Movement Code -> Slightly more elegant than manual code.
@@ -19,7 +25,6 @@ public class Game {
             makeClicker(move);
         }
         */
-
         do {
             System.out.print(gameGrid);
             System.out.println("Player: " + (i + 1));
@@ -31,6 +36,7 @@ public class Game {
             i = (i + 1) % 2;
             
         } while(input != 5);
-
+        
+        scans.close();
     }
 }

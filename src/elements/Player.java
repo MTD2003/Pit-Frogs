@@ -1,4 +1,5 @@
 package elements;
+import utilities.Constants;
 
 public class Player extends Entity {
     public Player(int x, int y) {
@@ -11,8 +12,8 @@ public class Player extends Entity {
     }
     
     public void setPos(int[] xy) {
-        setX(xy[0]);
-        setY(xy[1]);
+        setX(xy[Constants.X]);
+        setY(xy[Constants.Y]);
     }
 
     public int[] getPos() {

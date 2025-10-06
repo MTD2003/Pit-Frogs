@@ -7,7 +7,7 @@ public class Pit extends Space {
 
     @Override
     public boolean isBlocked() {
-        return true;
+        return false;
     }
 
     public String toString() {
