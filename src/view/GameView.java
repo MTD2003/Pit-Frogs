@@ -18,6 +18,5 @@ public class GameView {
 
     public void addComponent(Component c) {
         mframe.add(c);
-        mframe.repaint();
     }
 }

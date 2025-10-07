@@ -1,6 +1,6 @@
 package elements;
 
-public class Entity {
+public abstract class Entity {
     private int x;
     private int y;
 
