@@ -1,12 +1,18 @@
 package controllers;
 
 import elements.Grid;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Scanner;
+import javax.imageio.ImageIO;
+import utilities.SpriteList;
 import view.*;
 
 public class Game {
-    private int scale;
-    private int key_input;
+    //private int scale;
+    //private int keyInput;
+    private BufferedImage[] spriteSheet;
     
     public Game() {
         Grid gameGrid = new Grid(7);
@@ -17,6 +23,7 @@ public class Game {
 
         int i = 0;
         int input;
+        loadSprites();
         /* Diagonal Movement Code -> Slightly more elegant than manual code.
         int move[] = {-1, -1};
         for(int xy = 0; xy < 4; xy++) {
@@ -38,5 +45,25 @@ public class Game {
         } while(input != 5);
         
         scans.close();
+    }
+
+    private void loadSprites() {
+        InputStream curStream;
+        spriteSheet = new BufferedImage[SpriteList.SPR_BLANK.ordinal() + 1];
+        for(SpriteList spriteIndex : SpriteList.values()) {
+            curStream = getClass().getResourceAsStream(spriteIndex.path());
+            System.out.println(spriteIndex.path());
+            try {
+                spriteSheet[spriteIndex.ordinal()] = ImageIO.read(curStream);
+            } catch(IOException e) {
+                System.out.println(e);
+            } finally {
+                try {
+                    curStream.close();
+                } catch(IOException e) {
+                    System.out.println(e);
+                }
+            }
+        }
     }
 }

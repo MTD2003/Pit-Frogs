@@ -13,7 +13,7 @@ public class KeyInputs implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        parent.readKey(e);
+        parent.readKey(e.getKeyCode());
         // Send inputs to GamePanel function.
     }
 
