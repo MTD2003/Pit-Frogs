@@ -10,7 +10,7 @@ public class GamePanel extends JPanel {
     private Game game;
 
     public GamePanel() {
-        buildPanel(new Dimension(400, 400));
+        buildPanel(new Dimension(416, 416));
     }
 
     public GamePanel(int width, int height) {

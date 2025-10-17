@@ -1,9 +1,10 @@
 package elements;
+import utilities.SpriteList;
 
 public abstract class Entity {
     private int x;
     private int y;
-    private int spriteIndex;
+    private SpriteList spriteIndex;
     private int imageIndex;
 
     public Entity(int x, int y) {
@@ -20,7 +21,7 @@ public abstract class Entity {
     }
 
     public int getSprite() {
-        return spriteIndex;
+        return spriteIndex.ordinal();
     }
 
     public int getFrame() {
@@ -35,7 +36,7 @@ public abstract class Entity {
         this.y = y;
     }
 
-    public void setSprite(int spriteIndex) {
+    public void setSprite(SpriteList spriteIndex) {
         this.spriteIndex = spriteIndex;
     }
 

@@ -12,18 +12,19 @@ import view.*;
 public class Game {
     //private int scale;
     //private int keyInput;
-    private BufferedImage[] spriteSheet;
+    private BufferedImage[][] spriteSheet;
     
     public Game() {
         Grid gameGrid = new Grid(7);
-        Scanner scans = new Scanner(System.in);
+        
         GameView window = new GameView();
         GamePanel panel = new GamePanel();
         window.addComponent(panel);
 
-        int i = 0;
-        int input;
+        
         loadSprites();
+        //panel.getGraphics().drawImage(spriteSheet[5][0], 0, 0, 128, 128, null);
+        
         /* Diagonal Movement Code -> Slightly more elegant than manual code.
         int move[] = {-1, -1};
         for(int xy = 0; xy < 4; xy++) {
@@ -32,6 +33,12 @@ public class Game {
             makeClicker(move);
         }
         */
+        
+        /*
+        Scanner scans = new Scanner(System.in);
+        int i = 0;
+        int input;
+        
         do {
             System.out.print(gameGrid);
             System.out.println("Player: " + (i + 1));
@@ -45,16 +52,26 @@ public class Game {
         } while(input != 5);
         
         scans.close();
+        */
     }
 
     private void loadSprites() {
         InputStream curStream;
-        spriteSheet = new BufferedImage[SpriteList.SPR_BLANK.ordinal() + 1];
+        spriteSheet = new BufferedImage[SpriteList.SPR_BLANK.ordinal() + 1][];
         for(SpriteList spriteIndex : SpriteList.values()) {
             curStream = getClass().getResourceAsStream(spriteIndex.path());
-            System.out.println(spriteIndex.path());
             try {
-                spriteSheet[spriteIndex.ordinal()] = ImageIO.read(curStream);
+            	BufferedImage tempImg = ImageIO.read(curStream);
+            	int i = spriteIndex.ordinal();
+            	int fHeight = tempImg.getHeight(); // Spritesheets are horizontal, making height constant.
+            	int fWidth = tempImg.getWidth() / spriteIndex.frames();
+            	
+            	spriteSheet[i] = new BufferedImage[spriteIndex.frames()];
+            	for(int j = 0; j < spriteIndex.frames(); j++) {
+            		spriteSheet[i][j] = tempImg.getSubimage(fWidth * j, 0, fWidth, fHeight);
+            		System.out.println("Read frame " + j + " of sprite at " + spriteIndex.path());
+            	}
+            	
             } catch(IOException e) {
                 System.out.println(e);
             } finally {
