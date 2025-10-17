@@ -1,28 +1,36 @@
 package controllers;
 
 import elements.Grid;
+import elements.Entity;
+import java.util.ArrayList;
+import utilities.SpriteList;
+import view.*;
+
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
 import javax.imageio.ImageIO;
-import utilities.SpriteList;
-import view.*;
 
 public class Game {
-    //private int scale;
+	//private int scale;
     //private int keyInput;
     private BufferedImage[][] spriteSheet;
+    private Grid gameGrid;
+    private GameView window;
+    private GamePanel panel;
     
     public Game() {
-        Grid gameGrid = new Grid(7);
+        gameGrid = new Grid(7);
         
-        GameView window = new GameView();
-        GamePanel panel = new GamePanel();
+        window = new GameView();
+        panel = new GamePanel();
         window.addComponent(panel);
 
         
         loadSprites();
+        draw();
         //panel.getGraphics().drawImage(spriteSheet[5][0], 0, 0, 128, 128, null);
         
         /* Diagonal Movement Code -> Slightly more elegant than manual code.
@@ -54,10 +62,27 @@ public class Game {
         scans.close();
         */
     }
+    
+    private void step() {
+    	
+    }
+    
+    private void draw() {
+    	ArrayList<Entity> drawList = gameGrid.getDrawList();
+    	Graphics g = panel.getGraphics();
+    	
+    	for(Entity e : drawList) {
+    		// TODO: Implement proper scaling.
+    		int x = e.getX() * 56;
+    		int y = e.getY() * 48;
+    		g.drawImage(spriteSheet[e.getSprite()][e.getFrame()], x, y, 48, 48, null);
+    	}
+    }
 
+    // Loads all sprites provided in the SpriteList enum.
     private void loadSprites() {
         InputStream curStream;
-        spriteSheet = new BufferedImage[SpriteList.SPR_BLANK.ordinal() + 1][];
+        spriteSheet = new BufferedImage[SpriteList.SPR_BLANK.ordinal() + 1][]; // SPR_BLANK is at the end of the enum.
         for(SpriteList spriteIndex : SpriteList.values()) {
             curStream = getClass().getResourceAsStream(spriteIndex.path());
             try {
