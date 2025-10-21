@@ -13,11 +13,12 @@ public class GameView {
         mframe.setSize(Constants.SCREEN_SIZE, Constants.SCREEN_SIZE);
         mframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mframe.setLocationRelativeTo(null);
+        mframe.setResizable(false);
         mframe.setVisible(true);
     }
 
     public void addComponent(Component c) {
         mframe.add(c);
-        mframe.repaint();
+        mframe.pack();
     }
 }

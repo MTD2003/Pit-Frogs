@@ -1,4 +1,6 @@
 package elements;
+import java.util.ArrayList;
+
 import utilities.Constants;
 
 public class Grid {
@@ -44,13 +46,13 @@ public class Grid {
         player = new Player[actors];
         for(; j < 2; j++) { // Can guarantee min 2 players by game rules.
             int xy = (size - 1) * j;
-            player[j] = new Player(xy, xy);
+            player[j] = new Player(xy, xy , j);
             spaces[xy][xy].setBlocked(true);
         }
         for(; j < actors; j++) {
             int x = (size - 1) * (j % 2);
             int y = (size - 1) * ((j + 1) % 2);
-            player[j] = new Player(x, y);
+            player[j] = new Player(x, y, j);
             spaces[x][y].setBlocked(true);
         }
     }
@@ -127,6 +129,25 @@ public class Grid {
 
     public int actorsLeft() {
         return actors;
+    }
+    
+    // Compiles an ordered "draw list" for all assets on the grid.
+    // Ordered according to object type (primary) and position (secondary).
+    // Players are always placed above tiles.
+    public ArrayList<Entity> getDrawList() {
+    	ArrayList<Entity> drawList = new ArrayList<Entity>();
+    	
+    	for(int y = 0; y < size; y++) {
+    		for(int x = 0; x < size; x++) {
+    			drawList.add(spaces[x][y]);
+    		}
+    	}
+    	
+    	for(Player p : player) {
+    		drawList.addLast(p);
+    	}
+    	
+    	return drawList;
     }
 
     public String toString() {
