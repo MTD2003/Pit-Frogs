@@ -5,7 +5,7 @@ public enum SpriteList {
     SPR_GRID_CURSOR("/sprites/grid/Cursor.png", 1),
     SPR_PLAYER_SELECTOR("/sprites/grid/Selector.png", 1),
     SPR_TILE("/sprites/grid/Tile.png", 1),
-    SPR_PIT_CRUMBLE("/sprites/grid/Tile.png", 1),
+    SPR_PIT_CRUMBLE("/sprites/grid/Pit.png", 1),
     SPR_FROG1("/sprites/grid/Frog1.png", 1),
     SPR_FROG2("/sprites/grid/Frog2.png", 1),
     SPR_BLANK("/sprites/grid/Tile.png", 1); // Final sprite is always blank so we know the size of the sprite list. TODO: Implement fail safe.

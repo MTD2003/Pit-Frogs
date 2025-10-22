@@ -1,5 +1,4 @@
 package elements;
-import utilities.Constants;
 import utilities.SpriteList;
 
 public class Player extends Entity {
@@ -21,8 +20,8 @@ public class Player extends Entity {
     }
     
     public void setPos(int[] xy) {
-        setX(xy[Constants.X]);
-        setY(xy[Constants.Y]);
+        setX(xy[0]);
+        setY(xy[1]);
     }
 
     public int[] getPos() {

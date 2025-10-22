@@ -1,32 +1,28 @@
 package elements;
 import java.util.ArrayList;
 
-import utilities.Constants;
-
 public class Grid {
     private final int size;
     private final int actors;
+    private ArrayList<Selection> moves;
     private Space[][] spaces;
     private Player[] player;
+    private static final int X = 0;
+    private static final int Y = 1;
 
     public Grid() {
-        size = 4;
-        actors = 2;
-       
-        buildGrid();
+    	this(2, 6);
     }
 
     public Grid(int size) {
-        this.size = size;
-        actors = 2;
-        
-        buildGrid();
+    	this(2, size);
     }
 
     public Grid(int actors, int size) {
         this.size = size;
         this.actors = actors;
         
+        moves = new ArrayList<Selection>();
         buildGrid();
     }
 
@@ -37,6 +33,7 @@ public class Grid {
                 spaces[x][y] = new Space(x, y);
             }
         }
+        
         addPlayers();
     }
     
@@ -64,46 +61,46 @@ public class Grid {
         
         switch(inp) {
             case 9:
-                move[Constants.X] = 1;
-                move[Constants.Y] = -1;
+                move[X] = 1;
+                move[Y] = -1;
                 break;
             case 8:
-                move[Constants.X] = 0;
-                move[Constants.Y] = -1;
+                move[X] = 0;
+                move[Y] = -1;
                 break;
             case 7:
-                move[Constants.X] = -1;
-                move[Constants.Y] = -1;
+                move[X] = -1;
+                move[Y] = -1;
                 break;
             case 6:
-                move[Constants.X] = 1;
-                move[Constants.Y] = 0;
+                move[X] = 1;
+                move[Y] = 0;
                 break;
             case 4:
-                move[Constants.X] = -1;
-                move[Constants.Y] = 0;
+                move[X] = -1;
+                move[Y] = 0;
                 break;
             case 3:
-                move[Constants.X] = 1;
-                move[Constants.Y] = 1;
+                move[X] = 1;
+                move[Y] = 1;
                 break;
             case 2:
-                move[Constants.X] = 0;
-                move[Constants.Y] = 1;
+                move[X] = 0;
+                move[Y] = 1;
                 break;
             case 1:
-                move[Constants.X] = -1;
-                move[Constants.Y] = 1;
+                move[X] = -1;
+                move[Y] = 1;
         }
-        ppos[Constants.X] += move[Constants.X];
-        ppos[Constants.Y] += move[Constants.Y];
+        ppos[X] += move[X];
+        ppos[Y] += move[Y];
         
         // Moves player in direction.
         if(tryPos(ppos)) {
-            int xLast = ppos[Constants.X] - move[Constants.X];
-            int yLast = ppos[Constants.Y] - move[Constants.Y];
+            int xLast = ppos[X] - move[X];
+            int yLast = ppos[Y] - move[Y];
             
-            spaces[ppos[Constants.X]][ppos[Constants.Y]].setBlocked(true);
+            spaces[ppos[X]][ppos[Y]].setBlocked(true);
             if(makePit)
                 spaces[xLast][yLast] = new Pit(xLast, yLast);
             else
@@ -123,8 +120,12 @@ public class Grid {
             }
         }
         
-        Space jumpedTo = spaces[newPos[Constants.X]][newPos[Constants.Y]];
+        Space jumpedTo = spaces[newPos[X]][newPos[Y]];
         return (!jumpedTo.isBlocked()); // Returns false if space cannot be jumped to.
+    }
+    
+    public boolean generateMoves(int position, int direction) {
+    	return true;
     }
     
     // Compiles an ordered "draw list" for all assets on the grid.
@@ -138,7 +139,6 @@ public class Grid {
     			drawList.add(spaces[x][y]);
     		}
     	}
-    	
     	for(Player p : player) {
     		drawList.addLast(p);
     	}

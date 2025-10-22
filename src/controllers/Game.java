@@ -20,17 +20,20 @@ public class Game implements Runnable {
     private Grid gameGrid;
     private GameView window;
     private GamePanel panel;
+    private int gridScale; // Used for drawing and hitboxes.
     private static final int FPS = 60;
     private static final int UPS = 120;
+    private static final int MIN_PLAYERS = 2;
     
     public Game() {
         gameGrid = new Grid(7);
         
         window = new GameView();
-        panel = new GamePanel();
+        panel = new GamePanel(this);
         window.addComponent(panel);
-
+        
         loadSprites();
+        findGridScale();
         
         /* Diagonal Movement Code -> Slightly more elegant than manual code.
         int move[] = {-1, -1};
@@ -40,6 +43,13 @@ public class Game implements Runnable {
             makeClicker(move);
         }
         */
+    }
+    
+    // Calculates gridScale based on Window and Grid size.
+    public void findGridScale() {
+    	int gridSize = gameGrid.getSize();
+    	int screenSize = window.getMinSize();
+    	gridScale = (screenSize - SpriteList.SPRITE_DIMENSIONS / 2) / gridSize;
     }
     
     public void run() {
@@ -55,11 +65,12 @@ public class Game implements Runnable {
     		nanoCurrent = System.nanoTime();
     		
     		if((nanoCurrent - nanoUpdateLast) > nanoUpdateGap) {
-    			step();
+    			//step();
     			nanoUpdateLast = System.nanoTime();
     		}
     		
     		if((nanoCurrent - nanoFrameLast) > nanoFrameGap) {
+    			findGridScale();
     			draw();
     			nanoFrameLast = System.nanoTime();
     		}
@@ -71,7 +82,6 @@ public class Game implements Runnable {
         Scanner scans = new Scanner(System.in);
         int i = 0;
         int input;
-        
         do {
             System.out.print(gameGrid);
             System.out.println("Player: " + (i + 1));
@@ -88,23 +98,16 @@ public class Game implements Runnable {
         */
     }
     
-    // TODO: Fix the flicker on the draw function.
+    // TODO: Fix the flicker on the draw function. This will likely require a significant change.
     // TODO: Include border elements, centered scaling.
     private void draw() {
     	ArrayList<Entity> drawList = gameGrid.getDrawList();
     	Graphics g = panel.getGraphics();
     	
-    	int gridScale = gameGrid.getSize();
-    	int screenScale = window.getMinSize();
-    	int spriteScale = (screenScale - SpriteList.SPRITE_DIMENSIONS / 2) / gridScale;
-    	System.out.println(spriteScale);
-    	
-    	// TODO: Move this to base draw() when adding the new states.
     	for(Entity e : drawList) {
-    		// TODO: Implement proper scaling.
-    		int x = e.getX() * spriteScale;
-    		int y = e.getY() * spriteScale;
-    		g.drawImage(spriteSheet[e.getSprite()][e.getFrame()], x, y, spriteScale, spriteScale, null);
+    		int x = e.getX() * gridScale;
+    		int y = e.getY() * gridScale;
+    		g.drawImage(spriteSheet[e.getSprite()][e.getFrame()], x, y, gridScale, gridScale, null);
     	}
     }
 
