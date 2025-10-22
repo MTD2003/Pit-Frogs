@@ -13,13 +13,15 @@ import java.io.InputStream;
 import java.util.Scanner;
 import javax.imageio.ImageIO;
 
-public class Game {
+public class Game implements Runnable {
 	//private int scale;
     //private int keyInput;
     private BufferedImage[][] spriteSheet;
     private Grid gameGrid;
     private GameView window;
     private GamePanel panel;
+    private static final int FPS = 60;
+    private static final int UPS = 120;
     
     public Game() {
         gameGrid = new Grid(7);
@@ -28,10 +30,7 @@ public class Game {
         panel = new GamePanel();
         window.addComponent(panel);
 
-        
         loadSprites();
-        draw();
-        //panel.getGraphics().drawImage(spriteSheet[5][0], 0, 0, 128, 128, null);
         
         /* Diagonal Movement Code -> Slightly more elegant than manual code.
         int move[] = {-1, -1};
@@ -41,8 +40,34 @@ public class Game {
             makeClicker(move);
         }
         */
-        
-        /*
+    }
+    
+    public void run() {
+    	long nanoSeconds = 1000 * 1000 * 1000; // One nanosecond = 1 * 10^-9 seconds.
+    	long nanoFrameGap = nanoSeconds / FPS;
+    	long nanoUpdateGap = nanoSeconds / UPS;
+    	
+    	long nanoCurrent;
+    	long nanoUpdateLast = 0, nanoFrameLast = 0;
+    	
+    	// Basic game loop.
+    	while(true) {
+    		nanoCurrent = System.nanoTime();
+    		
+    		if((nanoCurrent - nanoUpdateLast) > nanoUpdateGap) {
+    			step();
+    			nanoUpdateLast = System.nanoTime();
+    		}
+    		
+    		if((nanoCurrent - nanoFrameLast) > nanoFrameGap) {
+    			draw();
+    			nanoFrameLast = System.nanoTime();
+    		}
+    	}
+    }
+    
+    private void step() {
+    	/* Placeholder block for running tests.
         Scanner scans = new Scanner(System.in);
         int i = 0;
         int input;
@@ -63,19 +88,23 @@ public class Game {
         */
     }
     
-    private void step() {
-    	
-    }
-    
+    // TODO: Fix the flicker on the draw function.
+    // TODO: Include border elements, centered scaling.
     private void draw() {
     	ArrayList<Entity> drawList = gameGrid.getDrawList();
     	Graphics g = panel.getGraphics();
     	
+    	int gridScale = gameGrid.getSize();
+    	int screenScale = window.getMinSize();
+    	int spriteScale = (screenScale - SpriteList.SPRITE_DIMENSIONS / 2) / gridScale;
+    	System.out.println(spriteScale);
+    	
+    	// TODO: Move this to base draw() when adding the new states.
     	for(Entity e : drawList) {
     		// TODO: Implement proper scaling.
-    		int x = e.getX() * 56;
-    		int y = e.getY() * 48;
-    		g.drawImage(spriteSheet[e.getSprite()][e.getFrame()], x, y, 48, 48, null);
+    		int x = e.getX() * spriteScale;
+    		int y = e.getY() * spriteScale;
+    		g.drawImage(spriteSheet[e.getSprite()][e.getFrame()], x, y, spriteScale, spriteScale, null);
     	}
     }
 

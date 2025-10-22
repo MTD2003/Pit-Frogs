@@ -126,10 +126,6 @@ public class Grid {
         Space jumpedTo = spaces[newPos[Constants.X]][newPos[Constants.Y]];
         return (!jumpedTo.isBlocked()); // Returns false if space cannot be jumped to.
     }
-
-    public int actorsLeft() {
-        return actors;
-    }
     
     // Compiles an ordered "draw list" for all assets on the grid.
     // Ordered according to object type (primary) and position (secondary).
@@ -148,6 +144,14 @@ public class Grid {
     	}
     	
     	return drawList;
+    }
+    
+    public int getActorsLeft() {
+        return actors;
+    }
+    
+    public int getSize() {
+    	return size;
     }
 
     public String toString() {
