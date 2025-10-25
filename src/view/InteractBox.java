@@ -21,7 +21,7 @@ public class InteractBox {
 		this.height = height;
 	}
 	
-	public Boolean checkHit(int clickX, int clickY) {
+	public boolean checkHit(int clickX, int clickY) {
 		if((clickX > x && clickX < (x + width)) && (clickY > y && clickY < (y + height))) {
 			parent.onActivate();
 			return true;
@@ -30,7 +30,7 @@ public class InteractBox {
 		return false;
 	}
 	
-	public Boolean checkBind(int key) {
+	public boolean checkBind(int key) {
 		if(key == bind) {
 			parent.onActivate();
 			return true;

@@ -29,7 +29,6 @@ public class Game implements Runnable {
     private ArrayList<InteractBox> hitboxes;
     private int turn;
     private int movesLeft;
-    private boolean canMove;
     private int timer;
     private final int maxTime;
     
@@ -47,18 +46,8 @@ public class Game implements Runnable {
         turn = 0;
         maxTime = 15;
         timer = 0;
-        canMove = true;
         movesLeft = 2;
         hitboxes = new ArrayList<InteractBox>();
-        
-        /* Diagonal Movement Code -> Slightly more elegant than manual code.
-        int move[] = {-1, -1};
-        for(int xy = 0; xy < 4; xy++) {
-            griddy[xy % 2] *= -1;
-            System.out.println(griddy[0] + ", " + griddy[1]);
-            makeClicker(move);
-        }
-        */
     }
     
     // Calculates gridScale based on Window and Grid size.
@@ -107,47 +96,35 @@ public class Game implements Runnable {
     	}
     	*/
     	
-    	if(gameGrid.getMovesNum() == 0 && movesLeft > 0) {
-    		gameGrid.generateMoves(turn, movesLeft % 2);
-    		generateHitboxes();
-    		canMove = false;
-    		movesLeft--;
+    	if(!gameGrid.getPlayerStatusAt(turn)) {
+    		movesLeft = 0;
+    	}
     	
-    	} else if(movesLeft == 0) {
-    		turn = (turn + 1) % gameGrid.getActorsLeft();
-    		movesLeft = 2;
+    	if(gameGrid.getMovesNum() == 0) {
+    		if(movesLeft > 0 && gameGrid.getPlayerStatusAt(turn)) {
+	    		gameGrid.generateMoves(turn, movesLeft % 2);
+	    		generateHitboxes();
+	    		movesLeft--;
+    	
+    		} else {
+	    		turn = gameGrid.getNextAlive(turn);
+	    		movesLeft = 2;
+	    		
+	    		tryWinCondition();
+    		}
     	}
     	
     	if(inputCheck()) {
     		hitboxes.clear();
     	}
-    	
-    	/*
-    	int lastKey = panel.popKey();
-    	if(lastKey != -1) {
-    		System.out.println("OUT");
-    		canMove = true;
-    		movesLeft--;
+    }
+    
+    // Checks the wincondition and then transitions to the winscreen state if it suceeds.
+    private void tryWinCondition() {
+    	if(turn == gameGrid.getNextAlive(turn)) {
+    		System.out.println("Player " + (turn + 1) + " wins!");
+			System.exit(0);
     	}
-    	*/
-    	/* Placeholder block for running tests.
-        Scanner scans = new Scanner(System.in);
-        int i = 0;
-        int input;
-        do {
-            System.out.print(gameGrid);
-            System.out.println("Player: " + (i + 1));
-            input = scans.nextInt();
-            gameGrid.playerMove(i, input, false);
-            System.out.print(gameGrid);
-            input = scans.nextInt();
-            gameGrid.playerMove(i, input, true);
-            i = (i + 1) % 2;
-            
-        } while(input != 5);
-        
-        scans.close();
-        */
     }
     
     // TODO: Fix the flicker on the draw function. This will likely require a significant change.
@@ -163,7 +140,7 @@ public class Game implements Runnable {
     	}
     }
     
-    private Boolean inputCheck() {
+    private boolean inputCheck() {
     	int lastKey = panel.popKey();
     	int mouseState = panel.popMouseState();
     	int mouseX = panel.getMouseX();
@@ -195,7 +172,6 @@ public class Game implements Runnable {
     		x = move.getX() * gridScale;
     		y = move.getY() * gridScale;
     		hitboxes.add(new InteractBox(move, x, y, gridScale, gridScale, move.calcKeyBind()));
-    		System.out.println(move.calcKeyBind());
     	}
     }
     
@@ -220,7 +196,7 @@ public class Game implements Runnable {
             	spriteSheet[i] = new BufferedImage[spriteIndex.frames()];
             	for(int j = 0; j < spriteIndex.frames(); j++) {
             		spriteSheet[i][j] = tempImg.getSubimage(fWidth * j, 0, fWidth, fHeight);
-            		System.out.println("Read frame " + j + " of sprite at " + spriteIndex.path());
+            		//System.out.println("Read frame " + j + " of sprite at " + spriteIndex.path());
             	}
             	
             } catch(IOException e) {

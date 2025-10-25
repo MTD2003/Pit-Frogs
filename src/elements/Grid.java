@@ -60,7 +60,13 @@ public class Grid {
     	int lastY = player[index].getY();
     	
     	player[index].setPos(newX, newY);
-    	spaces[newX][newY].setBlocked(true);
+    	if(spaces[newX][newY] instanceof Pit) { // Results in player death.
+    		player[index].kill();
+    		
+    	} else {
+    		spaces[newX][newY].setBlocked(true);
+    	}
+    	
     	if(player[index].getPit()) {
     		spaces[lastX][lastY] = new Pit(lastX, lastY);
     	} else {
@@ -85,7 +91,7 @@ public class Grid {
     
     // Generates player-adjacent selectables.
     // May be diagonal or horizontal.
-    public boolean generateMoves(int index, int direction) {
+    public void generateMoves(int index, int direction) {
     	int[] pos = { player[index].getX(), player[index].getY() };
     	int x, y;
     	
@@ -120,7 +126,6 @@ public class Grid {
                 newPos[xy % 2] *= -1;
                 x = pos[GridConsts.X] + newPos[GridConsts.X];
                 y = pos[GridConsts.Y] + newPos[GridConsts.Y];
-                System.out.println(x);
                 
                 if(tryPos(x, y)) {
                 	moves.add(new Selection(this, index, x, y));
@@ -129,11 +134,8 @@ public class Grid {
     	}
     	
     	if(moves.isEmpty()) {
-    		return false;
+    		player[index].kill();
     	}
-    	
-    	System.out.println("Success");
-    	return true;
     }
     
     public void clearMoves() {
@@ -173,12 +175,28 @@ public class Grid {
     	return player[index];
     }
     
-    public int getActorsLeft() {
+    public boolean getPlayerStatusAt(int index) {
+    	return player[index].isActive();
+    }
+    
+    public int getActors() {
         return actors;
     }
     
     public int getSize() {
     	return size;
+    }
+    
+    // Gets the next alive player for the turn count.
+    public int getNextAlive(int current) {
+    	for(int count = 0; count < actors; count++) {
+    		current = (current + 1) % actors;
+    		if(player[current].isActive()) {
+    			return current;
+    		}
+    	}
+    	
+    	return 0; // Failsafe return, shouldn't occur.
     }
 
     public String toString() {

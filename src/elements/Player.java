@@ -2,12 +2,23 @@ package elements;
 import utilities.SpriteList;
 
 public class Player extends Entity {
-	private Boolean dropPit;
+	private boolean dropPit;
+	private boolean active;
 	
     public Player(int x, int y, int index) {
         super(x, y);
         dropPit = false;
+        active = true;
         setPlayerSprite(index);
+    }
+
+    public void kill() {
+    	active = false;
+    	// setSprite();
+    }
+    
+    public void togglePit() {
+    	dropPit = (dropPit) ? false : true;
     }
     
     public void setPlayerSprite(int index) {
@@ -22,16 +33,12 @@ public class Player extends Entity {
         setY(newY);
     }
     
-    public Boolean getPit() {
+    public boolean isActive() {
+    	return active;
+    }
+    
+    public boolean getPit() {
     	return dropPit;
-    }
-    
-    public void togglePit() {
-    	dropPit = (dropPit) ? false : true;
-    }
-    
-    public void onDie() {
-    	
     }
 
     public String toString() {
