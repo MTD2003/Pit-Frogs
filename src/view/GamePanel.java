@@ -5,6 +5,7 @@ import utilities.MouseInputs;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 
@@ -13,6 +14,7 @@ public class GamePanel extends JPanel {
     private ArrayList<InteractBox> interactables;
     private int mouseX, mouseY;
     private int keyLast, mouseState;
+    private Image buffer;
     
     public static final int KEY_EMPTY = -1;
     public static final int MOUSE_IDLE = -1;
@@ -31,6 +33,7 @@ public class GamePanel extends JPanel {
         addKeyListener(new KeyInputs(this));
         setPreferredSize(new Dimension(width, height));
         setFocusable(true);
+        //setDoubleBuffered(true);
         
         // Setting base values.
         mouseX = 0;
@@ -42,6 +45,7 @@ public class GamePanel extends JPanel {
     // Extending JPanel allows us to use the paintComponent method, which simplifies drawing.
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        g.drawImage(buffer, 0, 0, null);
     }
     
     // Returns the last released key and resets it.
@@ -70,6 +74,11 @@ public class GamePanel extends JPanel {
     public int getMouseY() {
     	return mouseY;
     }
+    
+    public Image getImage() {
+    	buffer = this.createImage(getWidth(), getHeight());
+    	return buffer;
+    }
 
     public void setKey(int keyCode) {
         keyLast = keyCode;
@@ -78,6 +87,7 @@ public class GamePanel extends JPanel {
     public void setMousePos(int x, int y) {
     	mouseX = x;
     	mouseY = y;
+    	this.createImage(getWidth(), getHeight());
     }
     
     public void setMouseClick() {

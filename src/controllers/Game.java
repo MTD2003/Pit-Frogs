@@ -4,7 +4,6 @@ import elements.Grid;
 import elements.Entity;
 import elements.Selection;
 import utilities.SpriteList;
-import utilities.GridConsts;
 import view.*;
 
 import java.awt.Graphics;
@@ -33,7 +32,7 @@ public class Game implements Runnable {
     private final int maxTime;
     
     public Game() {
-        gameGrid = new Grid(4, 7);
+        gameGrid = new Grid(2, 7);
         
         window = new GameView();
         panel = new GamePanel(this);
@@ -44,7 +43,7 @@ public class Game implements Runnable {
         findGridScale();
         
         turn = 0;
-        maxTime = 15;
+        maxTime = 1;
         timer = 0;
         movesLeft = 2;
         hitboxes = new ArrayList<InteractBox>();
@@ -79,6 +78,7 @@ public class Game implements Runnable {
     		if((nanoCurrent - nanoFrameLast) > nanoFrameGap) {
     			findGridScale();
     			draw();
+    			
     			updateHitboxes();
     			nanoFrameLast = System.nanoTime();
     		}
@@ -88,15 +88,10 @@ public class Game implements Runnable {
     // TODO: Basic movement gameplay loop.
     // TODO: Add lose condition. Behaviour will boot to menu in final version.
     private void step() {
-    	/*
-    	int timeLimit = maxTime * 1000;
+    	int timeLimit = maxTime * UPS;
     	timer++;
-    	if(timeLimit <= timer) {
-    		// Randomly select move.
-    	}
-    	*/
     	
-    	if(!gameGrid.getPlayerStatusAt(turn)) {
+    	if((!gameGrid.getPlayerStatusAt(turn))) {
     		movesLeft = 0;
     	}
     	
@@ -104,6 +99,7 @@ public class Game implements Runnable {
     		if(movesLeft > 0 && gameGrid.getPlayerStatusAt(turn)) {
 	    		gameGrid.generateMoves(turn, movesLeft % 2);
 	    		generateHitboxes();
+	    		timer = 0;
 	    		movesLeft--;
     	
     		} else {
@@ -116,7 +112,13 @@ public class Game implements Runnable {
     	
     	if(inputCheck()) {
     		hitboxes.clear();
+    	} 
+    	/*
+    	else if(timeLimit <= timer) { // Timer check.
+    		randomMove();
+    		hitboxes.clear();
     	}
+    	*/
     }
     
     // Checks the wincondition and then transitions to the winscreen state if it suceeds.
@@ -127,16 +129,26 @@ public class Game implements Runnable {
     	}
     }
     
-    // TODO: Fix the flicker on the draw function. This will likely require a significant change.
     // TODO: Include border elements, centered scaling.
     private void draw() {
     	ArrayList<Entity> drawList = gameGrid.getDrawList();
-    	Graphics g = panel.getGraphics();
+    	Graphics buffer = panel.getImage().getGraphics(); // Gets the image buffer, then takes the graphics from there.
     	
     	for(Entity e : drawList) {
     		int x = e.getX() * gridScale;
     		int y = e.getY() * gridScale;
-    		g.drawImage(spriteSheet[e.getSprite()][e.getFrame()], x, y, gridScale, gridScale, null);
+    		buffer.drawImage(spriteSheet[e.getSprite()][e.getFrame()], x, y, gridScale, gridScale, null);
+    	}
+    	panel.repaint();
+    }
+    
+    // TODO: Figure out what bug is causing this functions to get double-called and always result in index 0.
+    private void randomMove() {
+    	double myRandom = Math.random();
+    	int index = (int)myRandom * hitboxes.size();
+    	System.out.println("Index results from : " + myRandom + " and " + hitboxes.size());
+    	if(hitboxes.size() > 0) {
+    		hitboxes.get(index).forceActivate();
     	}
     }
     

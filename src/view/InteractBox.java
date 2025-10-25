@@ -39,6 +39,10 @@ public class InteractBox {
 		return false;
 	}
 	
+	public void forceActivate() {
+		parent.onActivate();
+	}
+	
 	public void updateScale(int lastScale, int currentScale) {
 		x = (x / lastScale) * currentScale;
 		y = (y / lastScale) * currentScale;
