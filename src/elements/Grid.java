@@ -172,7 +172,24 @@ public class Grid {
             }
     	}
     	
+    	if(moves.isEmpty()) {
+    		return false;
+    	}
+    	
+    	System.out.println("Success");
     	return true;
+    }
+    
+    public void clearMoves() {
+    	moves.clear();
+    }
+    
+    public int getMovesNum() {
+    	return moves.size();
+    }
+    
+    public Selection getMoveAt(int index) {
+    	return moves.get(index);
     }
     
     // Compiles an ordered "draw list" for all assets on the grid.

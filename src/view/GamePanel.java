@@ -12,7 +12,12 @@ public class GamePanel extends JPanel {
     private Game game;
     private ArrayList<InteractBox> interactables;
     private int mouseX, mouseY;
-    private int keyLast;
+    private int keyLast, mouseState;
+    
+    public static final int KEY_EMPTY = -1;
+    public static final int MOUSE_IDLE = -1;
+    public static final int MOUSE_HELD = 1;
+    public static final int MOUSE_CLICK = 2;
 
     public GamePanel(Game game) {
     	this(game, 416, 416);
@@ -28,9 +33,10 @@ public class GamePanel extends JPanel {
         setFocusable(true);
         
         // Setting base values.
-        mouseX = -1;
-        mouseY = -1;
-        keyLast = -1;
+        mouseX = 0;
+        mouseY = 0;
+        keyLast = KEY_EMPTY;
+        mouseState = MOUSE_IDLE;
     }
     
     // Extending JPanel allows us to use the paintComponent method, which simplifies drawing.
@@ -46,13 +52,23 @@ public class GamePanel extends JPanel {
     	return tempKey;
     }
     
+    public int popMouseState() {
+    	int tempMouse = mouseState;
+    	
+    	mouseState = MOUSE_IDLE;
+    	return tempMouse;
+    }
+    
     public int getKey() {
     	return keyLast;
     }
     
-    public int[] getMousePos() {
-    	int[] xy = { mouseX, mouseY };
-    	return xy;
+    public int getMouseX() {
+    	return mouseX;
+    }
+    
+    public int getMouseY() {
+    	return mouseY;
     }
 
     public void setKey(int keyCode) {
@@ -62,5 +78,13 @@ public class GamePanel extends JPanel {
     public void setMousePos(int x, int y) {
     	mouseX = x;
     	mouseY = y;
+    }
+    
+    public void setMouseClick() {
+    	mouseState = MOUSE_CLICK;
+    }
+    
+    public void setMouseHeld() {
+    	mouseState = MOUSE_HELD;
     }
 }

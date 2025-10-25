@@ -12,13 +12,12 @@ public class KeyInputs implements KeyListener {
     }
 
     @Override
-    public void keyPressed(KeyEvent e) {
-        parent.setKey(e.getKeyCode());
-        // Send inputs to GamePanel function.
-    }
+    public void keyPressed(KeyEvent e) {}
 
     @Override
-    public void keyReleased(KeyEvent e) {}
+    public void keyReleased(KeyEvent e) {
+    	parent.setKey(e.getKeyCode());
+    }
 
     @Override
     public void keyTyped(KeyEvent e) {}

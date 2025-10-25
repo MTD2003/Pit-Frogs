@@ -9,7 +9,7 @@ public class InteractBox {
 	private Interactable parent;
 	
 	public InteractBox(Interactable parent, int x, int y, int width, int height) {
-		this(parent, x, y, width, height, -1);
+		this(parent, x, y, width, height, -2);
 	}
 	
 	public InteractBox(Interactable parent, int x, int y, int width, int height, int bind) {
@@ -21,16 +21,28 @@ public class InteractBox {
 		this.height = height;
 	}
 	
-	public void checkHit(int clickX, int clickY) {
+	public Boolean checkHit(int clickX, int clickY) {
 		if((clickX > x && clickX < (x + width)) && (clickY > y && clickY < (y + height))) {
-			System.out.println("IN BOUNDS");
-			// 
+			parent.onActivate();
+			return true;
 		}
+		
+		return false;
 	}
 	
-	public void checkBind(int key) {
+	public Boolean checkBind(int key) {
 		if(key == bind) {
-			System.out.println("KEY CLACKED");
+			parent.onActivate();
+			return true;
 		}
+		
+		return false;
+	}
+	
+	public void updateScale(int lastScale, int currentScale) {
+		x = (x / lastScale) * currentScale;
+		y = (y / lastScale) * currentScale;
+		width = (width / lastScale) * currentScale;
+		height = (height / lastScale) * currentScale;
 	}
 }

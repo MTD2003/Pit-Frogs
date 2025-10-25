@@ -15,6 +15,7 @@ public class MouseInputs implements MouseInputListener {
     public void mouseReleased(MouseEvent e) {
         // Register click for gameplay.
         parent.setMousePos(e.getX(), e.getY());
+        parent.setMouseClick();
     }
 
     @Override
@@ -29,7 +30,7 @@ public class MouseInputs implements MouseInputListener {
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        // Modify sprite to show clicking(?)
+        mousePressed(e);
         mouseMoved(e);
     }
 

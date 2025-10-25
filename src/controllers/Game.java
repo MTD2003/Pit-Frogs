@@ -2,6 +2,7 @@ package controllers;
 
 import elements.Grid;
 import elements.Entity;
+import elements.Selection;
 import utilities.SpriteList;
 import utilities.GridConsts;
 import view.*;
@@ -20,10 +21,17 @@ public class Game implements Runnable {
     private GameView window;
     private GamePanel panel;
     private int gridScale; // Used for drawing and hitboxes.
+    private int lastScale; // Used in rescaling hitboxes.
     
     private static final int FPS = 60;
     private static final int UPS = 120;
-    private static final int MIN_PLAYERS = 2;
+    
+    private ArrayList<InteractBox> hitboxes;
+    private int turn;
+    private int movesLeft;
+    private boolean canMove;
+    private int timer;
+    private final int maxTime;
     
     public Game() {
         gameGrid = new Grid(4, 7);
@@ -31,9 +39,17 @@ public class Game implements Runnable {
         window = new GameView();
         panel = new GamePanel(this);
         window.addComponent(panel);
+        gridScale = 1;
         
         loadSprites();
         findGridScale();
+        
+        turn = 0;
+        maxTime = 15;
+        timer = 0;
+        canMove = true;
+        movesLeft = 2;
+        hitboxes = new ArrayList<InteractBox>();
         
         /* Diagonal Movement Code -> Slightly more elegant than manual code.
         int move[] = {-1, -1};
@@ -49,6 +65,7 @@ public class Game implements Runnable {
     public void findGridScale() {
     	int gridSize = gameGrid.getSize();
     	int screenSize = window.getMinSize();
+    	lastScale = gridScale;
     	gridScale = (screenSize - SpriteList.SPRITE_DIMENSIONS / 2) / gridSize;
     }
     
@@ -60,8 +77,9 @@ public class Game implements Runnable {
     	long nanoCurrent;
     	long nanoUpdateLast = 0, nanoFrameLast = 0;
     	
-    	// Basic game loop.
-    	while(true) {
+    	panel.requestFocusInWindow();
+    	
+    	while(true) { // Basic game loop.
     		nanoCurrent = System.nanoTime();
     		
     		if((nanoCurrent - nanoUpdateLast) > nanoUpdateGap) {
@@ -72,19 +90,42 @@ public class Game implements Runnable {
     		if((nanoCurrent - nanoFrameLast) > nanoFrameGap) {
     			findGridScale();
     			draw();
+    			updateHitboxes();
     			nanoFrameLast = System.nanoTime();
     		}
     	}
     }
     
+    // TODO: Basic movement gameplay loop.
+    // TODO: Add lose condition. Behaviour will boot to menu in final version.
     private void step() {
-    	// TODO: Turn timer.
-    	// TODO: Turn loop.
+    	/*
+    	int timeLimit = maxTime * 1000;
+    	timer++;
+    	if(timeLimit <= timer) {
+    		// Randomly select move.
+    	}
+    	*/
+    	
+    	if(canMove && movesLeft > 0) {
+    		gameGrid.generateMoves(turn, movesLeft % 2);
+    		generateHitboxes();
+    		canMove = false;
+    	} else if(movesLeft == 0) {
+    		turn = (turn + 1) % gameGrid.getActorsLeft();
+    		movesLeft = 2;
+    	}
+    	
+    	inputCheck();
+    	
+    	/*
     	int lastKey = panel.popKey();
     	if(lastKey != -1) {
     		System.out.println("OUT");
-    		gameGrid.generateMoves(0, GridConsts.ORTHOGONAL);
+    		canMove = true;
+    		movesLeft--;
     	}
+    	*/
     	/* Placeholder block for running tests.
         Scanner scans = new Scanner(System.in);
         int i = 0;
@@ -115,6 +156,45 @@ public class Game implements Runnable {
     		int x = e.getX() * gridScale;
     		int y = e.getY() * gridScale;
     		g.drawImage(spriteSheet[e.getSprite()][e.getFrame()], x, y, gridScale, gridScale, null);
+    	}
+    }
+    
+    private void inputCheck() {
+    	int lastKey = panel.popKey();
+    	int mouseState = panel.popMouseState();
+    	int mouseX = panel.getMouseX();
+    	int mouseY = panel.getMouseY();
+    	
+    	if(lastKey != GamePanel.KEY_EMPTY || mouseState != GamePanel.MOUSE_IDLE) {
+    		for(InteractBox ib : hitboxes) {
+    			if(ib.checkHit(mouseX, mouseY)) {
+    				break;
+    			}
+    			if(ib.checkBind(lastKey)) {
+    				break;
+    			}
+    		}
+    	}
+    }
+    
+    // Generates InteractBoxes for each Interactable.
+    // Updates with changes in screenscale.
+    private void generateHitboxes() {
+    	int x, y;
+    	int totalMoves = gameGrid.getMovesNum();
+    	
+    	// hitboxes.clear();
+    	for(int i = 0; i < totalMoves; i++) {
+    		Selection move = gameGrid.getMoveAt(i);
+    		x = move.getX() * gridScale;
+    		y = move.getY() * gridScale;
+    		hitboxes.add(new InteractBox(move, x, y, gridScale, gridScale, GridConsts.calcKeyBind(x, y)));
+    	}
+    }
+    
+    private void updateHitboxes() {
+    	for(InteractBox ib : hitboxes) {
+    		ib.updateScale(lastScale, gridScale);
     	}
     }
 

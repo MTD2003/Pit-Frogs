@@ -21,6 +21,6 @@ public class Selection extends Entity implements Interactable {
 	
 	// TODO: Force move on Grid.
 	public void onActivate() {
-		
+		System.out.println("ACTIVATED");
 	}
 }
