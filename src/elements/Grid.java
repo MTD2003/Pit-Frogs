@@ -1,14 +1,15 @@
 package elements;
+import utilities.GridConsts;
 import java.util.ArrayList;
 
 public class Grid {
     private final int size;
     private final int actors;
+    // private final int teams;
+    
     private ArrayList<Selection> moves;
     private Space[][] spaces;
     private Player[] player;
-    private static final int X = 0;
-    private static final int Y = 1;
 
     public Grid() {
     	this(2, 6);
@@ -54,7 +55,7 @@ public class Grid {
         }
     }
 
-    // Redo this when you do the GUI.
+    /* Redo this when you do the GUI.
     public boolean playerMove(int turn, int inp, boolean makePit) {
         int[] move = {0, 0}; // [0] = x, [1] = y
         int[] ppos = player[turn].getPos();
@@ -112,19 +113,65 @@ public class Grid {
 
         return false;
     }
+    */
 
-    private boolean tryPos(int[] newPos) {
-        for(int xy = 0; xy <= 1; xy++) {
-            if(newPos[xy] >= size || newPos[xy] < 0) {
-                return false;
-            }
-        }
-        
-        Space jumpedTo = spaces[newPos[X]][newPos[Y]];
-        return (!jumpedTo.isBlocked()); // Returns false if space cannot be jumped to.
+    // Checks if a given position on the grid is valid.
+    private boolean tryPos(int x, int y) {
+    	if(x >= size || x < 0) {
+    		return false;
+    	}
+    	if(y >= size || y < 0) {
+    		return false;
+    	}
+    	
+        return (!spaces[x][y].isBlocked()); // Returns false if space is blocked, true if it isn't.
     }
     
-    public boolean generateMoves(int position, int direction) {
+    // Generates player-adjacent selectables.
+    // May be diagonal or horizontal.
+    public boolean generateMoves(int index, int direction) {
+    	int[] pos = { player[index].getX(), player[index].getY() };
+    	int x, y;
+    	
+    	// Might seem weird to write a "if not" for this logic but it's to account for later game rules.
+    	// If the direction input is neither diagonal OR orthogonal, performs both generations.
+    	if(direction != GridConsts.DIAGONAL) {
+    		int temp;
+    		int addPos[] = {-1, 0};
+    		
+    		for(int xy = 0; xy < 4; xy++) { // negate -> swap -> negate -> swap pattern.
+    			if(xy % 2 == 0) {
+    				addPos[GridConsts.X] *= -1;
+    				addPos[GridConsts.Y] *= -1;
+    			} else {
+    				temp = addPos[GridConsts.X];
+    				addPos[GridConsts.X] = addPos[GridConsts.Y];
+    				addPos[GridConsts.Y] = temp;
+    			}
+    			
+    			x = pos[GridConsts.X] + addPos[GridConsts.X];
+    			y = pos[GridConsts.Y] + addPos[GridConsts.Y];
+    			if(tryPos(x, y)) {
+    				moves.add(new Selection(player[index], x, y));
+    			}
+    			
+    		}
+    	}
+    	
+    	if(direction != GridConsts.ORTHOGONAL) { // Gens diagonal selections.
+    		int newPos[] = {-1, -1};
+            for(int xy = 0; xy < 4; xy++) {
+                newPos[xy % 2] *= -1;
+                x = pos[GridConsts.X] + newPos[GridConsts.X];
+                y = pos[GridConsts.Y] + newPos[GridConsts.Y];
+                System.out.println(x);
+                
+                if(tryPos(x, y)) {
+                	moves.add(new Selection(player[index], x, y));
+                }
+            }
+    	}
+    	
     	return true;
     }
     
@@ -141,6 +188,9 @@ public class Grid {
     	}
     	for(Player p : player) {
     		drawList.addLast(p);
+    	}
+    	for(Selection s : moves) {
+    		drawList.addLast(s);
     	}
     	
     	return drawList;

@@ -2,5 +2,6 @@ package view;
 
 // General interface for clickable elements.
 public interface Interactable {
-	// killChild();
+	public abstract void onHover();
+	public abstract void onActivate();
 }

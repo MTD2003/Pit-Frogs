@@ -2,8 +2,8 @@ package controllers;
 
 import elements.Grid;
 import elements.Entity;
-import java.util.ArrayList;
 import utilities.SpriteList;
+import utilities.GridConsts;
 import view.*;
 
 import java.awt.Graphics;
@@ -12,21 +12,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
 import javax.imageio.ImageIO;
+import java.util.ArrayList;
 
 public class Game implements Runnable {
-	//private int scale;
-    //private int keyInput;
     private BufferedImage[][] spriteSheet;
     private Grid gameGrid;
     private GameView window;
     private GamePanel panel;
     private int gridScale; // Used for drawing and hitboxes.
+    
     private static final int FPS = 60;
     private static final int UPS = 120;
     private static final int MIN_PLAYERS = 2;
     
     public Game() {
-        gameGrid = new Grid(7);
+        gameGrid = new Grid(4, 7);
         
         window = new GameView();
         panel = new GamePanel(this);
@@ -65,7 +65,7 @@ public class Game implements Runnable {
     		nanoCurrent = System.nanoTime();
     		
     		if((nanoCurrent - nanoUpdateLast) > nanoUpdateGap) {
-    			//step();
+    			step();
     			nanoUpdateLast = System.nanoTime();
     		}
     		
@@ -78,6 +78,13 @@ public class Game implements Runnable {
     }
     
     private void step() {
+    	// TODO: Turn timer.
+    	// TODO: Turn loop.
+    	int lastKey = panel.popKey();
+    	if(lastKey != -1) {
+    		System.out.println("OUT");
+    		gameGrid.generateMoves(0, GridConsts.ORTHOGONAL);
+    	}
     	/* Placeholder block for running tests.
         Scanner scans = new Scanner(System.in);
         int i = 0;

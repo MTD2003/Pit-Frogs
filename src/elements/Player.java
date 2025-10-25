@@ -19,6 +19,7 @@ public class Player extends Entity {
         setY(newY);
     }
     
+    /* Commenting out as they're unnecessary and potentially code unsafe.
     public void setPos(int[] xy) {
         setX(xy[0]);
         setY(xy[1]);
@@ -28,6 +29,7 @@ public class Player extends Entity {
         int[] pos = {getX(), getY()};
         return pos;
     }
+    */
 
     public String toString() {
         return "P";

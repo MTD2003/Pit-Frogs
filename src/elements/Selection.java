@@ -1,20 +1,26 @@
 package elements;
 
 import utilities.SpriteList;
+import view.Interactable;
 
-public class Selection extends Entity {
-	private final int[] move;
+public class Selection extends Entity implements Interactable {
+	//private final int[] move;
 	private Player player; // Remove if logic doesn't need it.
 	
-	public Selection(Player player, int x, int y, int[] move) {
+	public Selection(Player player, int x, int y) {
 		super(x, y);
 		this.player = player;
-		this.move = move;
 		
 		setSprite(SpriteList.SPR_GRID_CURSOR);
 	}
 	
-	public int[] getMove() {
-		return move;
+	// TODO: Create sprites for Hover.
+	public void onHover() {
+		
+	}
+	
+	// TODO: Force move on Grid.
+	public void onActivate() {
+		
 	}
 }

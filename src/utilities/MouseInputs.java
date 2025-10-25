@@ -14,7 +14,7 @@ public class MouseInputs implements MouseInputListener {
     @Override
     public void mouseReleased(MouseEvent e) {
         // Register click for gameplay.
-        parent.readMouse(e.getX(), e.getY());
+        parent.setMousePos(e.getX(), e.getY());
     }
 
     @Override
