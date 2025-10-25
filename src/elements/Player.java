@@ -2,8 +2,11 @@ package elements;
 import utilities.SpriteList;
 
 public class Player extends Entity {
+	private Boolean dropPit;
+	
     public Player(int x, int y, int index) {
         super(x, y);
+        dropPit = false;
         setPlayerSprite(index);
     }
     
@@ -19,17 +22,17 @@ public class Player extends Entity {
         setY(newY);
     }
     
-    /* Commenting out as they're unnecessary and potentially code unsafe.
-    public void setPos(int[] xy) {
-        setX(xy[0]);
-        setY(xy[1]);
+    public Boolean getPit() {
+    	return dropPit;
     }
-
-    public int[] getPos() {
-        int[] pos = {getX(), getY()};
-        return pos;
+    
+    public void togglePit() {
+    	dropPit = (dropPit) ? false : true;
     }
-    */
+    
+    public void onDie() {
+    	
+    }
 
     public String toString() {
         return "P";

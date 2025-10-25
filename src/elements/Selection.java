@@ -1,17 +1,33 @@
 package elements;
 
+import java.awt.event.KeyEvent;
+
 import utilities.SpriteList;
 import view.Interactable;
 
 public class Selection extends Entity implements Interactable {
 	//private final int[] move;
-	private Player player; // Remove if logic doesn't need it.
+	private Grid grid;
+	private final int playerIndex; // Remove if logic doesn't need it.
 	
-	public Selection(Player player, int x, int y) {
+	public Selection(Grid grid, int playerIndex, int x, int y) {
 		super(x, y);
-		this.player = player;
+		this.grid = grid;
+		this.playerIndex = playerIndex;
 		
 		setSprite(SpriteList.SPR_GRID_CURSOR);
+	}
+	
+	// Returns the numpad keybind based on the given X and Y direction.
+	public int calcKeyBind() {
+		Player player = grid.getPlayerAt(playerIndex);
+		int xDirection = getX() - player.getX();
+		int yDirection = getY() - player.getY();
+		int numpad = 5;
+		
+		numpad += Math.signum(xDirection);
+		numpad -= Math.signum(yDirection) * 3;
+		return numpad + KeyEvent.VK_NUMPAD0;
 	}
 	
 	// TODO: Create sprites for Hover.
@@ -21,6 +37,6 @@ public class Selection extends Entity implements Interactable {
 	
 	// TODO: Force move on Grid.
 	public void onActivate() {
-		System.out.println("ACTIVATED");
+		grid.playerMove(playerIndex, getX(), getY());
 	}
 }

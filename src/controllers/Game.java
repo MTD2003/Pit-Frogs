@@ -107,16 +107,20 @@ public class Game implements Runnable {
     	}
     	*/
     	
-    	if(canMove && movesLeft > 0) {
+    	if(gameGrid.getMovesNum() == 0 && movesLeft > 0) {
     		gameGrid.generateMoves(turn, movesLeft % 2);
     		generateHitboxes();
     		canMove = false;
+    		movesLeft--;
+    	
     	} else if(movesLeft == 0) {
     		turn = (turn + 1) % gameGrid.getActorsLeft();
     		movesLeft = 2;
     	}
     	
-    	inputCheck();
+    	if(inputCheck()) {
+    		hitboxes.clear();
+    	}
     	
     	/*
     	int lastKey = panel.popKey();
@@ -159,7 +163,7 @@ public class Game implements Runnable {
     	}
     }
     
-    private void inputCheck() {
+    private Boolean inputCheck() {
     	int lastKey = panel.popKey();
     	int mouseState = panel.popMouseState();
     	int mouseX = panel.getMouseX();
@@ -168,13 +172,15 @@ public class Game implements Runnable {
     	if(lastKey != GamePanel.KEY_EMPTY || mouseState != GamePanel.MOUSE_IDLE) {
     		for(InteractBox ib : hitboxes) {
     			if(ib.checkHit(mouseX, mouseY)) {
-    				break;
+    				return true;
     			}
     			if(ib.checkBind(lastKey)) {
-    				break;
+    				return true;
     			}
     		}
     	}
+    	
+    	return false;
     }
     
     // Generates InteractBoxes for each Interactable.
@@ -188,7 +194,8 @@ public class Game implements Runnable {
     		Selection move = gameGrid.getMoveAt(i);
     		x = move.getX() * gridScale;
     		y = move.getY() * gridScale;
-    		hitboxes.add(new InteractBox(move, x, y, gridScale, gridScale, GridConsts.calcKeyBind(x, y)));
+    		hitboxes.add(new InteractBox(move, x, y, gridScale, gridScale, move.calcKeyBind()));
+    		System.out.println(move.calcKeyBind());
     	}
     }
     

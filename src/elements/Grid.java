@@ -54,66 +54,22 @@ public class Grid {
             spaces[x][y].setBlocked(true);
         }
     }
-
-    /* Redo this when you do the GUI.
-    public boolean playerMove(int turn, int inp, boolean makePit) {
-        int[] move = {0, 0}; // [0] = x, [1] = y
-        int[] ppos = player[turn].getPos();
-        
-        switch(inp) {
-            case 9:
-                move[X] = 1;
-                move[Y] = -1;
-                break;
-            case 8:
-                move[X] = 0;
-                move[Y] = -1;
-                break;
-            case 7:
-                move[X] = -1;
-                move[Y] = -1;
-                break;
-            case 6:
-                move[X] = 1;
-                move[Y] = 0;
-                break;
-            case 4:
-                move[X] = -1;
-                move[Y] = 0;
-                break;
-            case 3:
-                move[X] = 1;
-                move[Y] = 1;
-                break;
-            case 2:
-                move[X] = 0;
-                move[Y] = 1;
-                break;
-            case 1:
-                move[X] = -1;
-                move[Y] = 1;
-        }
-        ppos[X] += move[X];
-        ppos[Y] += move[Y];
-        
-        // Moves player in direction.
-        if(tryPos(ppos)) {
-            int xLast = ppos[X] - move[X];
-            int yLast = ppos[Y] - move[Y];
-            
-            spaces[ppos[X]][ppos[Y]].setBlocked(true);
-            if(makePit)
-                spaces[xLast][yLast] = new Pit(xLast, yLast);
-            else
-                spaces[xLast][yLast].setBlocked(false);
-            player[turn].setPos(ppos);
-
-            return true;
-        }
-
-        return false;
+    
+    public void playerMove(int index, int newX, int newY) {
+    	int lastX = player[index].getX();
+    	int lastY = player[index].getY();
+    	
+    	player[index].setPos(newX, newY);
+    	spaces[newX][newY].setBlocked(true);
+    	if(player[index].getPit()) {
+    		spaces[lastX][lastY] = new Pit(lastX, lastY);
+    	} else {
+    		spaces[lastX][lastY].setBlocked(false);
+    	}
+    	
+    	player[index].togglePit();
+    	clearMoves();
     }
-    */
 
     // Checks if a given position on the grid is valid.
     private boolean tryPos(int x, int y) {
@@ -152,7 +108,7 @@ public class Grid {
     			x = pos[GridConsts.X] + addPos[GridConsts.X];
     			y = pos[GridConsts.Y] + addPos[GridConsts.Y];
     			if(tryPos(x, y)) {
-    				moves.add(new Selection(player[index], x, y));
+    				moves.add(new Selection(this, index, x, y));
     			}
     			
     		}
@@ -167,7 +123,7 @@ public class Grid {
                 System.out.println(x);
                 
                 if(tryPos(x, y)) {
-                	moves.add(new Selection(player[index], x, y));
+                	moves.add(new Selection(this, index, x, y));
                 }
             }
     	}
@@ -182,14 +138,6 @@ public class Grid {
     
     public void clearMoves() {
     	moves.clear();
-    }
-    
-    public int getMovesNum() {
-    	return moves.size();
-    }
-    
-    public Selection getMoveAt(int index) {
-    	return moves.get(index);
     }
     
     // Compiles an ordered "draw list" for all assets on the grid.
@@ -211,6 +159,18 @@ public class Grid {
     	}
     	
     	return drawList;
+    }
+    
+    public int getMovesNum() {
+    	return moves.size();
+    }
+    
+    public Selection getMoveAt(int index) {
+    	return moves.get(index);
+    }
+    
+    public Player getPlayerAt(int index) {
+    	return player[index];
     }
     
     public int getActorsLeft() {
