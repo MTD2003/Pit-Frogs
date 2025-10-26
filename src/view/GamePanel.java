@@ -13,7 +13,7 @@ public class GamePanel extends JPanel {
     private Game game;
     private ArrayList<InteractBox> interactables;
     private int mouseX, mouseY;
-    private int keyLast, mouseState;
+    private int keyHeld, keyLast, mouseState;
     private Image buffer;
     
     public static final int KEY_EMPTY = -1;
@@ -67,6 +67,10 @@ public class GamePanel extends JPanel {
     	return keyLast;
     }
     
+    public int getHeld() {
+    	return keyHeld;
+    }
+    
     public int getMouseX() {
     	return mouseX;
     }
@@ -82,6 +86,10 @@ public class GamePanel extends JPanel {
 
     public void setKey(int keyCode) {
         keyLast = keyCode;
+    }
+    
+    public void setHeld(int keyCode) {
+    	keyHeld = keyCode;
     }
 
     public void setMousePos(int x, int y) {

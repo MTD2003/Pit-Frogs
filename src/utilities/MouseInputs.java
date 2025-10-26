@@ -13,14 +13,13 @@ public class MouseInputs implements MouseInputListener {
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        // Register click for gameplay.
         parent.setMousePos(e.getX(), e.getY());
         parent.setMouseClick();
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        // Move mouse position.
+    	parent.setMousePos(e.getX(), e.getY());
     }
 
     @Override

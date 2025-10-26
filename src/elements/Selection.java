@@ -30,12 +30,14 @@ public class Selection extends Entity implements Interactable {
 		return numpad + KeyEvent.VK_NUMPAD0;
 	}
 	
-	// TODO: Create sprites for Hover.
-	public void onHover() {
-		
+	public void onNothing() {
+		setFrame(0);
 	}
 	
-	// TODO: Force move on Grid.
+	public void onHover() {
+		setFrame(1);
+	}
+	
 	public void onActivate() {
 		grid.playerMove(playerIndex, getX(), getY());
 	}

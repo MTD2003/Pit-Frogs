@@ -12,11 +12,14 @@ public class KeyInputs implements KeyListener {
     }
 
     @Override
-    public void keyPressed(KeyEvent e) {}
+    public void keyPressed(KeyEvent e) {
+    	parent.setHeld(e.getKeyCode());
+    }
 
     @Override
     public void keyReleased(KeyEvent e) {
     	parent.setKey(e.getKeyCode());
+    	parent.setHeld(-1);
     }
 
     @Override

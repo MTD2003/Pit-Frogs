@@ -21,8 +21,12 @@ public class InteractBox {
 		this.height = height;
 	}
 	
+	private boolean boundsCheck(int clickX, int clickY) {
+		return ((clickX > x && clickX < (x + width)) && (clickY > y && clickY < (y + height)));
+	}
+	
 	public boolean checkHit(int clickX, int clickY) {
-		if((clickX > x && clickX < (x + width)) && (clickY > y && clickY < (y + height))) {
+		if(boundsCheck(clickX, clickY)) {
 			parent.onActivate();
 			return true;
 		}
@@ -37,6 +41,15 @@ public class InteractBox {
 		}
 		
 		return false;
+	}
+	
+	public void checkHover(int clickX, int clickY, int key) {
+		if((boundsCheck(clickX, clickY)) || (key == bind)) {
+			parent.onHover();
+			System.out.println("Success");
+		} else {
+			parent.onNothing();
+		}
 	}
 	
 	public void forceActivate() {

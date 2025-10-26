@@ -85,8 +85,6 @@ public class Game implements Runnable {
     	}
     }
     
-    // TODO: Basic movement gameplay loop.
-    // TODO: Add lose condition. Behaviour will boot to menu in final version.
     private void step() {
     	int timeLimit = maxTime * UPS;
     	timer++;
@@ -110,6 +108,7 @@ public class Game implements Runnable {
     		}
     	}
     	
+    	hoverCheck();
     	if(inputCheck()) {
     		hitboxes.clear();
     	} 
@@ -152,6 +151,16 @@ public class Game implements Runnable {
     	}
     }
     
+    private void hoverCheck() {
+    	int heldKey = panel.getHeld();
+    	int mouseX = panel.getMouseX();
+    	int mouseY = panel.getMouseY();
+    	
+    	for(InteractBox ib : hitboxes) {
+    		ib.checkHover(mouseX, mouseY, heldKey);
+    	}
+    }
+    
     private boolean inputCheck() {
     	int lastKey = panel.popKey();
     	int mouseState = panel.popMouseState();
@@ -173,12 +182,10 @@ public class Game implements Runnable {
     }
     
     // Generates InteractBoxes for each Interactable.
-    // Updates with changes in screenscale.
     private void generateHitboxes() {
     	int x, y;
     	int totalMoves = gameGrid.getMovesNum();
     	
-    	// hitboxes.clear();
     	for(int i = 0; i < totalMoves; i++) {
     		Selection move = gameGrid.getMoveAt(i);
     		x = move.getX() * gridScale;
@@ -187,6 +194,7 @@ public class Game implements Runnable {
     	}
     }
     
+    // Updates with changes in screenscale.
     private void updateHitboxes() {
     	for(InteractBox ib : hitboxes) {
     		ib.updateScale(lastScale, gridScale);
