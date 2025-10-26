@@ -126,8 +126,10 @@ public class Grid {
             }
     	}
     	
-    	if(moves.isEmpty())
+    	if(moves.isEmpty()) {
     		player[index].kill();
+    		spaces[pos[GridConsts.X]][pos[GridConsts.Y]] = new Pit(pos[GridConsts.X], pos[GridConsts.Y]);
+    	}
     }
     
     public void clearMoves() {

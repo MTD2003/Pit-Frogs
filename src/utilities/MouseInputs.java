@@ -14,7 +14,7 @@ public class MouseInputs implements MouseInputListener {
     @Override
     public void mouseReleased(MouseEvent e) {
         parent.setMousePos(e.getX(), e.getY());
-        parent.setMouseClick();
+        parent.setMouseState(GamePanel.MOUSE_CLICK);
     }
 
     @Override
@@ -24,7 +24,7 @@ public class MouseInputs implements MouseInputListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        // Modify sprite to show clicking.
+        parent.setMouseState(GamePanel.MOUSE_HELD);
     }
 
     @Override

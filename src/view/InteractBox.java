@@ -44,6 +44,7 @@ public class InteractBox {
 	}
 	
 	public void checkHover(int clickX, int clickY, int key) {
+		//System.out.println(key);
 		if((boundsCheck(clickX, clickY)) || (key == bind))
 			parent.onHover();
 		else

@@ -19,7 +19,8 @@ public class KeyInputs implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
     	parent.setKey(e.getKeyCode());
-    	parent.setHeld(-1);
+    	if(parent.getHeld() == e.getKeyCode())
+    		parent.setHeld(-1); // Resets heldKey if it's the same as released.
     }
 
     @Override

@@ -20,7 +20,7 @@ public class GamePanel extends JPanel {
     public static final int MOUSE_CLICK = 2;
 
     public GamePanel() {
-    	this(416, 416);
+    	this(448, 448);
     }
 
     public GamePanel(int width, int height) {
@@ -93,11 +93,7 @@ public class GamePanel extends JPanel {
     	this.createImage(getWidth(), getHeight());
     }
     
-    public void setMouseClick() {
-    	mouseState = MOUSE_CLICK;
-    }
-    
-    public void setMouseHeld() {
-    	mouseState = MOUSE_HELD;
+    public void setMouseState(int mouseState) {
+    	this.mouseState = mouseState;
     }
 }

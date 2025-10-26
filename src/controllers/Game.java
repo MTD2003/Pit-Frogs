@@ -30,7 +30,7 @@ public class Game implements Runnable {
     private final int maxTime;
     
     public Game() {
-        gameGrid = new Grid(2, 7);
+        gameGrid = new Grid(4, 7);
         
         window = new GameView();
         panel = new GamePanel();
@@ -137,15 +137,18 @@ public class Game implements Runnable {
     
     private boolean inputCheck() {
     	int lastKey = panel.popKey();
+    	int heldKey = panel.getHeld();
     	int mouseState = panel.popMouseState();
     	int mouseX = panel.getMouseX();
     	int mouseY = panel.getMouseY();
     	
-    	if(lastKey != GamePanel.KEY_EMPTY || mouseState != GamePanel.MOUSE_IDLE) {
+    	if(mouseState == GamePanel.MOUSE_CLICK) {
     		for(InteractBox ib : hitboxes) {
     			if(ib.checkHit(mouseX, mouseY))
-    				return true;
-    			
+    				 return true;
+    		}
+    	} else if(lastKey != GamePanel.KEY_EMPTY && heldKey == GamePanel.KEY_EMPTY) {
+    		for(InteractBox ib : hitboxes) {
     			if(ib.checkBind(lastKey))
     				return true;
     		}
