@@ -1,7 +1,5 @@
 package utilities;
 
-import java.awt.event.KeyEvent;
-
 public class GridConsts {
 	public static final int X = 0;
 	public static final int Y = 1;

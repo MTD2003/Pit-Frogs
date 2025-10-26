@@ -2,8 +2,6 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Insets;
-
 import javax.swing.JFrame;
 
 public class GameView {

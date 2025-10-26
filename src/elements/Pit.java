@@ -11,8 +11,4 @@ public class Pit extends Space {
     public boolean isBlocked() {
         return false;
     }
-
-    public String toString() {
-        return "X";
-    }
 }

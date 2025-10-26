@@ -17,6 +17,14 @@ public class Player extends Entity {
     	// setSprite();
     }
     
+    public boolean isActive() {
+    	return active;
+    }
+    
+    public boolean getPit() {
+    	return dropPit;
+    }
+    
     public void togglePit() {
     	dropPit = (dropPit) ? false : true;
     }
@@ -31,17 +39,5 @@ public class Player extends Entity {
     public void setPos(int newX, int newY) {
         setX(newX);
         setY(newY);
-    }
-    
-    public boolean isActive() {
-    	return active;
-    }
-    
-    public boolean getPit() {
-    	return dropPit;
-    }
-
-    public String toString() {
-        return "P";
     }
 }

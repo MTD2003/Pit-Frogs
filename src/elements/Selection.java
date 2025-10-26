@@ -1,9 +1,8 @@
 package elements;
-
-import java.awt.event.KeyEvent;
-
 import utilities.SpriteList;
 import view.Interactable;
+
+import java.awt.event.KeyEvent;
 
 public class Selection extends Entity implements Interactable {
 	//private final int[] move;

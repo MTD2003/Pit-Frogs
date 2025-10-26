@@ -1,5 +1,4 @@
 package controllers;
-
 import elements.Grid;
 import elements.Entity;
 import elements.Selection;
@@ -10,7 +9,6 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Scanner;
 import javax.imageio.ImageIO;
 import java.util.ArrayList;
 
@@ -20,7 +18,7 @@ public class Game implements Runnable {
     private GameView window;
     private GamePanel panel;
     private int gridScale; // Used for drawing and hitboxes.
-    private int lastScale; // Used in rescaling hitboxes.
+    private int lastScale; // Used in some rescaling operations.
     
     private static final int FPS = 60;
     private static final int UPS = 120;
@@ -35,7 +33,7 @@ public class Game implements Runnable {
         gameGrid = new Grid(2, 7);
         
         window = new GameView();
-        panel = new GamePanel(this);
+        panel = new GamePanel();
         window.addComponent(panel);
         gridScale = 1;
         
@@ -47,14 +45,6 @@ public class Game implements Runnable {
         timer = 0;
         movesLeft = 2;
         hitboxes = new ArrayList<InteractBox>();
-    }
-    
-    // Calculates gridScale based on Window and Grid size.
-    public void findGridScale() {
-    	int gridSize = gameGrid.getSize();
-    	int screenSize = window.getMinSize();
-    	lastScale = gridScale;
-    	gridScale = (screenSize - SpriteList.SPRITE_DIMENSIONS / 2) / gridSize;
     }
     
     public void run() {
@@ -89,9 +79,8 @@ public class Game implements Runnable {
     	int timeLimit = maxTime * UPS;
     	timer++;
     	
-    	if((!gameGrid.getPlayerStatusAt(turn))) {
+    	if((!gameGrid.getPlayerStatusAt(turn)))
     		movesLeft = 0;
-    	}
     	
     	if(gameGrid.getMovesNum() == 0) {
     		if(movesLeft > 0 && gameGrid.getPlayerStatusAt(turn)) {
@@ -109,9 +98,9 @@ public class Game implements Runnable {
     	}
     	
     	hoverCheck();
-    	if(inputCheck()) {
+    	if(inputCheck())
     		hitboxes.clear();
-    	} 
+    	
     	/*
     	else if(timeLimit <= timer) { // Timer check.
     		randomMove();
@@ -128,27 +117,13 @@ public class Game implements Runnable {
     	}
     }
     
-    // TODO: Include border elements, centered scaling.
-    private void draw() {
-    	ArrayList<Entity> drawList = gameGrid.getDrawList();
-    	Graphics buffer = panel.getImage().getGraphics(); // Gets the image buffer, then takes the graphics from there.
-    	
-    	for(Entity e : drawList) {
-    		int x = e.getX() * gridScale;
-    		int y = e.getY() * gridScale;
-    		buffer.drawImage(spriteSheet[e.getSprite()][e.getFrame()], x, y, gridScale, gridScale, null);
-    	}
-    	panel.repaint();
-    }
-    
     // TODO: Figure out what bug is causing this functions to get double-called and always result in index 0.
     private void randomMove() {
     	double myRandom = Math.random();
     	int index = (int)myRandom * hitboxes.size();
     	System.out.println("Index results from : " + myRandom + " and " + hitboxes.size());
-    	if(hitboxes.size() > 0) {
+    	if(hitboxes.size() > 0)
     		hitboxes.get(index).forceActivate();
-    	}
     }
     
     private void hoverCheck() {
@@ -156,9 +131,8 @@ public class Game implements Runnable {
     	int mouseX = panel.getMouseX();
     	int mouseY = panel.getMouseY();
     	
-    	for(InteractBox ib : hitboxes) {
+    	for(InteractBox ib : hitboxes)
     		ib.checkHover(mouseX, mouseY, heldKey);
-    	}
     }
     
     private boolean inputCheck() {
@@ -169,12 +143,11 @@ public class Game implements Runnable {
     	
     	if(lastKey != GamePanel.KEY_EMPTY || mouseState != GamePanel.MOUSE_IDLE) {
     		for(InteractBox ib : hitboxes) {
-    			if(ib.checkHit(mouseX, mouseY)) {
+    			if(ib.checkHit(mouseX, mouseY))
     				return true;
-    			}
-    			if(ib.checkBind(lastKey)) {
+    			
+    			if(ib.checkBind(lastKey))
     				return true;
-    			}
     		}
     	}
     	
@@ -196,9 +169,29 @@ public class Game implements Runnable {
     
     // Updates with changes in screenscale.
     private void updateHitboxes() {
-    	for(InteractBox ib : hitboxes) {
+    	for(InteractBox ib : hitboxes)
     		ib.updateScale(lastScale, gridScale);
+    }
+    
+    // TODO: Include border elements, centered scaling.
+    private void draw() {
+    	ArrayList<Entity> drawList = gameGrid.getDrawList();
+    	Graphics buffer = panel.getImage().getGraphics(); // Gets the image buffer, then takes the graphics from there.
+    	
+    	for(Entity e : drawList) {
+    		int x = e.getX() * gridScale;
+    		int y = e.getY() * gridScale;
+    		buffer.drawImage(spriteSheet[e.getSprite()][e.getFrame()], x, y, gridScale, gridScale, null);
     	}
+    	panel.repaint();
+    }
+    
+    // Calculates gridScale based on Window and Grid size.
+    public void findGridScale() {
+    	int gridSize = gameGrid.getSize();
+    	int screenSize = window.getMinSize();
+    	lastScale = gridScale;
+    	gridScale = (screenSize - SpriteList.SPRITE_DIMENSIONS / 2) / gridSize;
     }
 
     // Loads all sprites provided in the SpriteList enum.

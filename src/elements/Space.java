@@ -16,11 +16,4 @@ public class Space extends Entity {
     public void setBlocked(boolean blocked) {
         this.blocked = blocked;
     }
-
-    public String toString() {
-        if(blocked)
-            return "P";
-        else
-            return " ";
-    }
 }

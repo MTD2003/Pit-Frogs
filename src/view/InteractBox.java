@@ -44,12 +44,10 @@ public class InteractBox {
 	}
 	
 	public void checkHover(int clickX, int clickY, int key) {
-		if((boundsCheck(clickX, clickY)) || (key == bind)) {
+		if((boundsCheck(clickX, clickY)) || (key == bind))
 			parent.onHover();
-			System.out.println("Success");
-		} else {
+		else
 			parent.onNothing();
-		}
 	}
 	
 	public void forceActivate() {

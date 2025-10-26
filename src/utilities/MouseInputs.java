@@ -1,8 +1,8 @@
 package utilities;
+import view.GamePanel;
 
 import java.awt.event.MouseEvent;
 import javax.swing.event.MouseInputListener;
-import view.GamePanel;
 
 public class MouseInputs implements MouseInputListener {
     private GamePanel parent;

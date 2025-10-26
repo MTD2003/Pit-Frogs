@@ -1,5 +1,6 @@
 package elements;
 import utilities.GridConsts;
+
 import java.util.ArrayList;
 
 public class Grid {
@@ -30,9 +31,8 @@ public class Grid {
     private void buildGrid() {
         spaces = new Space[size][size];
         for(int x = 0; x < size; x++) {
-            for(int y = 0; y < size; y++) {
+            for(int y = 0; y < size; y++)
                 spaces[x][y] = new Space(x, y);
-            }
         }
         
         addPlayers();
@@ -60,18 +60,15 @@ public class Grid {
     	int lastY = player[index].getY();
     	
     	player[index].setPos(newX, newY);
-    	if(spaces[newX][newY] instanceof Pit) { // Results in player death.
+    	if(spaces[newX][newY] instanceof Pit) // Results in player death.
     		player[index].kill();
-    		
-    	} else {
+    	else
     		spaces[newX][newY].setBlocked(true);
-    	}
     	
-    	if(player[index].getPit()) {
+    	if(player[index].getPit())
     		spaces[lastX][lastY] = new Pit(lastX, lastY);
-    	} else {
+    	else
     		spaces[lastX][lastY].setBlocked(false);
-    	}
     	
     	player[index].togglePit();
     	clearMoves();
@@ -79,12 +76,10 @@ public class Grid {
 
     // Checks if a given position on the grid is valid.
     private boolean tryPos(int x, int y) {
-    	if(x >= size || x < 0) {
+    	if(x >= size || x < 0)
     		return false;
-    	}
-    	if(y >= size || y < 0) {
+    	if(y >= size || y < 0)
     		return false;
-    	}
     	
         return (!spaces[x][y].isBlocked()); // Returns false if space is blocked, true if it isn't.
     }
@@ -113,10 +108,9 @@ public class Grid {
     			
     			x = pos[GridConsts.X] + addPos[GridConsts.X];
     			y = pos[GridConsts.Y] + addPos[GridConsts.Y];
-    			if(tryPos(x, y)) {
-    				moves.add(new Selection(this, index, x, y));
-    			}
     			
+    			if(tryPos(x, y))
+    				moves.add(new Selection(this, index, x, y));
     		}
     	}
     	
@@ -127,15 +121,13 @@ public class Grid {
                 x = pos[GridConsts.X] + newPos[GridConsts.X];
                 y = pos[GridConsts.Y] + newPos[GridConsts.Y];
                 
-                if(tryPos(x, y)) {
+                if(tryPos(x, y))
                 	moves.add(new Selection(this, index, x, y));
-                }
             }
     	}
     	
-    	if(moves.isEmpty()) {
+    	if(moves.isEmpty())
     		player[index].kill();
-    	}
     }
     
     public void clearMoves() {
@@ -149,16 +141,13 @@ public class Grid {
     	ArrayList<Entity> drawList = new ArrayList<Entity>();
     	
     	for(int y = 0; y < size; y++) {
-    		for(int x = 0; x < size; x++) {
+    		for(int x = 0; x < size; x++)
     			drawList.add(spaces[x][y]);
-    		}
     	}
-    	for(Player p : player) {
+    	for(Player p : player)
     		drawList.addLast(p);
-    	}
-    	for(Selection s : moves) {
+    	for(Selection s : moves)
     		drawList.addLast(s);
-    	}
     	
     	return drawList;
     }
@@ -179,35 +168,22 @@ public class Grid {
     	return player[index].isActive();
     }
     
+    // Gets the next alive player for the turn count.
+    public int getNextAlive(int current) {
+    	for(int count = 0; count < actors; count++) {
+    		current = (current + 1) % actors;
+    		if(player[current].isActive())
+    			return current;
+    	}
+    	
+    	return 0; // Failsafe return, shouldn't occur.
+    }
+    
     public int getActors() {
         return actors;
     }
     
     public int getSize() {
     	return size;
-    }
-    
-    // Gets the next alive player for the turn count.
-    public int getNextAlive(int current) {
-    	for(int count = 0; count < actors; count++) {
-    		current = (current + 1) % actors;
-    		if(player[current].isActive()) {
-    			return current;
-    		}
-    	}
-    	
-    	return 0; // Failsafe return, shouldn't occur.
-    }
-
-    public String toString() {
-        String output = "";
-        for(int y = 0; y < size; y++) { // Y-Axis should be vertical.
-            for(int x = 0; x < size; x++) { // X-Axis should print out on same line.
-                output += "[" + spaces[x][y] + "] ";
-            }
-            output += "\n";
-        }
-
-        return output;
     }
 }

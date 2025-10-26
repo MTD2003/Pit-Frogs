@@ -1,5 +1,4 @@
 package view;
-import controllers.Game;
 import utilities.KeyInputs;
 import utilities.MouseInputs;
 
@@ -10,7 +9,6 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 
 public class GamePanel extends JPanel {
-    private Game game;
     private ArrayList<InteractBox> interactables;
     private int mouseX, mouseY;
     private int keyHeld, keyLast, mouseState;
@@ -21,25 +19,22 @@ public class GamePanel extends JPanel {
     public static final int MOUSE_HELD = 1;
     public static final int MOUSE_CLICK = 2;
 
-    public GamePanel(Game game) {
-    	this(game, 416, 416);
+    public GamePanel() {
+    	this(416, 416);
     }
 
-    public GamePanel(Game game, int width, int height) {
-    	this.game = game;
+    public GamePanel(int width, int height) {
+    	// Setting base values.
+        mouseX = 0;
+        mouseY = 0;
+        keyLast = KEY_EMPTY;
+        mouseState = MOUSE_IDLE;
     	
         addMouseListener(new MouseInputs(this));
         addMouseMotionListener(new MouseInputs(this));
         addKeyListener(new KeyInputs(this));
         setPreferredSize(new Dimension(width, height));
         setFocusable(true);
-        //setDoubleBuffered(true);
-        
-        // Setting base values.
-        mouseX = 0;
-        mouseY = 0;
-        keyLast = KEY_EMPTY;
-        mouseState = MOUSE_IDLE;
     }
     
     // Extending JPanel allows us to use the paintComponent method, which simplifies drawing.

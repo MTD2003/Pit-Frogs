@@ -1,8 +1,8 @@
 package utilities;
+import view.GamePanel;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import view.GamePanel;
 
 public class KeyInputs implements KeyListener {
     private GamePanel parent;
