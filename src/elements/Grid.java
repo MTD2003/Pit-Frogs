@@ -59,18 +59,14 @@ public class Grid {
     	int lastX = player[index].getX();
     	int lastY = player[index].getY();
     	
-    	player[index].setPos(newX, newY);
-    	if(spaces[newX][newY] instanceof Pit) // Results in player death.
-    		player[index].kill();
-    	else
-    		spaces[newX][newY].setBlocked(true);
-    	
     	if(player[index].getPit())
     		spaces[lastX][lastY] = new Pit(lastX, lastY);
     	else
     		spaces[lastX][lastY].setBlocked(false);
     	
-    	player[index].togglePit();
+    	player[index].setPos(newX, newY);
+    	spaces[newX][newY].onLand(player[index]); // Results in death if the space is a pit.
+    	
     	clearMoves();
     }
 

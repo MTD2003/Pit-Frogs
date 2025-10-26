@@ -8,6 +8,12 @@ public class Space extends Entity {
         super(x, y);
         setSprite(SpriteList.SPR_TILE);
     }
+    
+    // TODO: Add some sort of feedback.
+    public void onLand(Player player) {
+    	blocked = true;
+    	player.togglePit(); // Alerts player to change if next jump makes a pit.
+    }
 
     public boolean isBlocked() {
         return blocked;
