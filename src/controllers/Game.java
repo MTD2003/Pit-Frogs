@@ -30,7 +30,7 @@ public class Game implements Runnable {
     private final int maxTime;
     
     public Game() {
-        gameGrid = new Grid(4, 7);
+        gameGrid = new Grid(4, 6);
         
         window = new GameView();
         panel = new GamePanel();
@@ -200,7 +200,7 @@ public class Game implements Runnable {
     // Loads all sprites provided in the SpriteList enum.
     private void loadSprites() {
         InputStream curStream;
-        spriteSheet = new BufferedImage[SpriteList.SPR_BLANK.ordinal() + 1][]; // SPR_BLANK is at the end of the enum.
+        spriteSheet = new BufferedImage[SpriteList.size() + 1][]; // SPR_BLANK is at the end of the enum.
         for(SpriteList spriteIndex : SpriteList.values()) {
             curStream = getClass().getResourceAsStream(spriteIndex.path());
             try {

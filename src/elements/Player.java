@@ -5,6 +5,8 @@ public class Player extends Entity {
 	private boolean dropPit;
 	private boolean active;
 	
+	private static final int IN_PIT = 1;
+	
     public Player(int x, int y, int index) {
         super(x, y);
         dropPit = false;
@@ -14,7 +16,7 @@ public class Player extends Entity {
 
     public void kill() {
     	active = false;
-    	// setSprite();
+    	setFrame(IN_PIT);
     }
     
     public boolean isActive() {
