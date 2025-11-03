@@ -61,6 +61,12 @@ public class GridState implements State {
     	}
     	
     	inputProcessing();
+    	
+    	System.out.println(timer);
+    	if(timer == timeLimit) {
+    		randomMove();
+    		timer = 0;
+    	}
 	}
 
 	@Override
@@ -140,10 +146,18 @@ public class GridState implements State {
     	}
     }
     
-    // TODO: Special handling by the Game class...
     private void updateHitboxes() {
     	for(InteractBox ib : hitboxes)
     		ib.updateScale(lastScale, gridScale);
+    }
+    
+    private void randomMove() {
+    	if(!hitboxes.isEmpty()) {
+    		int move = (int)(Math.random() * hitboxes.size());
+    		hitboxes.get(move).forceActivate();
+    		
+    		hitboxes.clear();
+    	}
     }
     
 	private void tryWinCondition() {
