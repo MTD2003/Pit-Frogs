@@ -54,6 +54,7 @@ public class InputMirror {
     
     // Clears clicks, check to make sure MOUSE_HELD isn't active.
     public void clearClick() {
-    	mouseState = MOUSE_IDLE;
+    	if(mouseState == MOUSE_CLICK)
+    		mouseState = MOUSE_IDLE;
     }
 }

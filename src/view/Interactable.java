@@ -4,5 +4,6 @@ package view;
 public interface Interactable {
 	public abstract void onNothing();
 	public abstract void onHover();
+	public abstract void onPress();
 	public abstract void onActivate();
 }

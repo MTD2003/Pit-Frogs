@@ -1,7 +1,5 @@
 package controllers;
 
-import utilities.InputMirror;
-
 import java.awt.Graphics;
 
 public interface State {

@@ -1,7 +1,4 @@
 package controllers;
-import elements.Grid;
-import elements.Entity;
-import elements.Selection;
 import utilities.InputMirror;
 import utilities.SpriteList;
 import view.*;
@@ -11,7 +8,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import javax.imageio.ImageIO;
-import java.util.ArrayList;
 
 public class Game implements Runnable {
     private BufferedImage[][] spriteSheet;
@@ -26,6 +22,7 @@ public class Game implements Runnable {
         window = new GameView();
         panel = new GamePanel();
         stateObj = new GridState(this);
+        
         window.addComponent(panel);
         loadSprites();
     }
