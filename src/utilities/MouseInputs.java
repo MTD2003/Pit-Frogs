@@ -1,30 +1,28 @@
 package utilities;
-import view.GamePanel;
 
 import java.awt.event.MouseEvent;
 import javax.swing.event.MouseInputListener;
 
 public class MouseInputs implements MouseInputListener {
-    private GamePanel parent;
+    private InputMirror inputs;
 
-    public MouseInputs(GamePanel parent) {
-        this.parent = parent;
+    public MouseInputs(InputMirror inputs) {
+        this.inputs = inputs;
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        parent.setMousePos(e.getX(), e.getY());
-        parent.setMouseState(GamePanel.MOUSE_CLICK);
+        inputs.setMouseState(InputMirror.MOUSE_CLICK);
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
-    	parent.setMousePos(e.getX(), e.getY());
+    	inputs.setMousePos(e.getX(), e.getY());
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        parent.setMouseState(GamePanel.MOUSE_HELD);
+    	inputs.setMouseState(InputMirror.MOUSE_HELD);
     }
 
     @Override
