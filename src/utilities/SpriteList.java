@@ -9,7 +9,8 @@ public enum SpriteList {
     SPR_FROG1("/sprites/grid/Frog1.png", 2),
     SPR_FROG2("/sprites/grid/Frog2.png", 2),
     SPR_FROG3("/sprites/grid/Frog3.png", 2),
-    SPR_FROG4("/sprites/grid/Frog4.png", 2);
+    SPR_FROG4("/sprites/grid/Frog4.png", 2),
+    SPR_GRID_UI("/sprites/grid/GridMenu.png", 1);
 	
 	public static final int SPRITE_DIMENSIONS = 16;
 	private final String path;

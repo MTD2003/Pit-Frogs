@@ -62,7 +62,6 @@ public class GridState implements State {
     	
     	inputProcessing();
     	
-    	System.out.println(timer);
     	if(timer == timeLimit) {
     		randomMove();
     		timer = 0;
@@ -123,7 +122,7 @@ public class GridState implements State {
     }
     
     // Calculates gridScale based on Window and Grid size.
-    public void findGridScale() {
+    private void findGridScale() {
     	int gridSize = gridObj.getSize();
     	int height = gameObj.getWindowHeight();
     	int width = gameObj.getWindowWidth();
@@ -131,6 +130,12 @@ public class GridState implements State {
     	
     	lastScale = gridScale;
     	gridScale = (size - SpriteList.SPRITE_DIMENSIONS / 2) / gridSize;
+    }
+    
+    private void findScale() {
+    	int height = (int)(gameObj.getWindowHeight() * 0.8);
+    	int width = gameObj.getWindowWidth();
+    	int size = Math.min(width, height);
     }
     
     // Generates InteractBoxes for each Interactable.
