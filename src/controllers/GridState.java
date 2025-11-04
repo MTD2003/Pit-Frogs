@@ -3,6 +3,7 @@ package controllers;
 import elements.Entity;
 import elements.Grid;
 import elements.Selection;
+import menu.MenuText;
 import utilities.InputMirror;
 import utilities.SpriteList;
 import view.InteractBox;
@@ -15,6 +16,7 @@ public class GridState implements State {
 	private ArrayList<InteractBox> hitboxes;
 	private final Game gameObj;
 	private final Grid gridObj;
+	private MenuText turnCounter;
 	
 	private final int maxTime;
 	private int timer, turn, movesLeft;

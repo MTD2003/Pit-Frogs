@@ -1,15 +1,14 @@
 package menu;
 
-import controllers.Game;
 import controllers.State;
 import view.Interactable;
 
-public class MenuLink implements Interactable {
+public class MenuLink extends MenuText implements Interactable {
+	private String text;
 	private State parent;
-	private MenuLayout layout;
-	private int x, y;
 	
-	public MenuLink(State parent) {
+	public MenuLink(State parent, String text, int x, int y, int width, int height) {
+		super(text, x, y, width, height);
 		this.parent = parent;
 	}
 
