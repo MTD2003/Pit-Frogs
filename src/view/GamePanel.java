@@ -1,4 +1,6 @@
 package view;
+
+import controllers.Game;
 import utilities.InputMirror;
 import utilities.KeyInputs;
 import utilities.MouseInputs;
@@ -6,7 +8,6 @@ import utilities.MouseInputs;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.util.ArrayList;
 import javax.swing.JPanel;
 
 public class GamePanel extends JPanel {
@@ -14,7 +15,7 @@ public class GamePanel extends JPanel {
     private InputMirror inputs;
 
     public GamePanel() {
-    	this(448, 448);
+    	this(Game.SCREEN_WIDTH, Game.SCREEN_HEIGHT);
     }
 
     public GamePanel(int width, int height) {

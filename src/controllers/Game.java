@@ -18,6 +18,9 @@ public class Game implements Runnable {
     public static final int FPS = 60;
     public static final int UPS = 120;
     
+    public static final int SCREEN_WIDTH = 544;
+    public static final int SCREEN_HEIGHT = 652;
+    
     public Game() {
         window = new GameView();
         panel = new GamePanel();

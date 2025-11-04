@@ -11,7 +11,7 @@ public class GameView {
     public GameView() {
         mframe = new JFrame(GAME_NAME);
         mframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mframe.setResizable(true);
+        mframe.setResizable(false);
         mframe.setLayout(new BorderLayout());
         mframe.setVisible(true);
     }

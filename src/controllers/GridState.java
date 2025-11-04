@@ -8,6 +8,7 @@ import utilities.InputMirror;
 import utilities.SpriteList;
 import view.InteractBox;
 
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -16,10 +17,10 @@ public class GridState implements State {
 	private ArrayList<InteractBox> hitboxes;
 	private final Game gameObj;
 	private final Grid gridObj;
-	private MenuText turnCounter;
+	private MenuText countTurn, countPlayer, countTime;
 	
 	private final int maxTime;
-	private int timer, turn, movesLeft;
+	private int timer, index, turn, movesLeft;
 	private int gridScale, lastScale;
 	
 	public GridState(Game gameObj) {
@@ -34,28 +35,32 @@ public class GridState implements State {
 		hitboxes = new ArrayList<InteractBox>();
 		gridScale = 1; // Safety to prevent frame 1 crash.
 		
+		index = 0;
 		movesLeft = 2;
 		timer = 0;
-		turn = 0;
+		turn = 1;
+		
+		loadText();
 	}
 
 	public void step() {
 		int timeLimit = maxTime * Game.UPS;
     	timer++;
     	
-    	if((!gridObj.getPlayerStatusAt(turn)))
+    	if((!gridObj.getPlayerStatusAt(index)))
     		movesLeft = 0;
     	
     	if(gridObj.getMovesNum() == 0) {
-    		if(movesLeft > 0 && gridObj.getPlayerStatusAt(turn)) {
-	    		gridObj.generateMoves(turn, movesLeft % 2);
+    		if(movesLeft > 0 && gridObj.getPlayerStatusAt(index)) {
+	    		gridObj.generateMoves(index, movesLeft % 2);
 	    		generateHitboxes();
 	    		timer = 0;
 	    		movesLeft--;
     	
     		} else {
-	    		turn = gridObj.getNextAlive(turn);
+	    		index = gridObj.getNextAlive(index);
 	    		movesLeft = 2;
+	    		turn++;
 	    		
 	    		tryWinCondition();
     		}
@@ -82,6 +87,33 @@ public class GridState implements State {
     	}
     	
     	updateHitboxes();
+    	updateText();
+    	
+    	countTurn.selfDraw(g);
+    	countPlayer.selfDraw(g);
+    	countTime.selfDraw(g);
+	}
+	
+	public void loadText() {
+		int fontSize = 24;
+		Font fontBasic = new Font("Consolas", Font.PLAIN, fontSize);
+		countTurn = new MenuText("", 0, Game.SCREEN_HEIGHT - fontSize, fontSize, fontBasic);
+		countPlayer = new MenuText("", 0, countTurn.getY() - fontSize, fontSize, fontBasic);
+		countTime = new MenuText("", Game.SCREEN_WIDTH - fontSize * 4, countPlayer.getY(), fontSize * 2, fontBasic);
+		
+	}
+	
+	// Will handle scaling later.
+	public void updateText() {
+		int truTime = maxTime - timer / Game.UPS;
+		String strTime = Integer.toString(truTime);
+		if(truTime / 10 == 0)
+			strTime = "0" + strTime;
+		
+		countTurn.setText("Turn " + turn);
+		countPlayer.setText("Player " + (index + 1));
+		countTime.setText(strTime);
+		System.out.println(strTime);
 	}
 	
 	private void inputProcessing() {
@@ -160,8 +192,8 @@ public class GridState implements State {
     }
     
 	private void tryWinCondition() {
-    	if(turn == gridObj.getNextAlive(turn)) {
-    		System.out.println("Player " + (turn + 1) + " wins!");
+    	if(index == gridObj.getNextAlive(index)) {
+    		System.out.println("Player " + (index + 1) + " wins!");
 			System.exit(0);
     	}
     }
