@@ -1,7 +1,5 @@
 package controllers;
-import elements.Grid;
-import elements.Entity;
-import elements.Selection;
+import utilities.InputMirror;
 import utilities.SpriteList;
 import view.*;
 
@@ -10,41 +8,23 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import javax.imageio.ImageIO;
-import java.util.ArrayList;
 
 public class Game implements Runnable {
     private BufferedImage[][] spriteSheet;
-    private Grid gameGrid;
+    private State stateObj;
     private GameView window;
     private GamePanel panel;
-    private int gridScale; // Used for drawing and hitboxes.
-    private int lastScale; // Used in some rescaling operations.
     
-    private static final int FPS = 60;
-    private static final int UPS = 120;
-    
-    private ArrayList<InteractBox> hitboxes;
-    private int turn;
-    private int movesLeft;
-    private int timer;
-    private final int maxTime;
+    public static final int FPS = 60;
+    public static final int UPS = 120;
     
     public Game() {
-        gameGrid = new Grid(4, 6);
-        
         window = new GameView();
         panel = new GamePanel();
+        stateObj = new GridState(this);
+        
         window.addComponent(panel);
-        gridScale = 1;
-        
         loadSprites();
-        findGridScale();
-        
-        turn = 0;
-        maxTime = 1;
-        timer = 0;
-        movesLeft = 2;
-        hitboxes = new ArrayList<InteractBox>();
     }
     
     public void run() {
@@ -66,137 +46,28 @@ public class Game implements Runnable {
     		}
     		
     		if((nanoCurrent - nanoFrameLast) > nanoFrameGap) {
-    			findGridScale();
     			draw();
-    			
-    			updateHitboxes();
     			nanoFrameLast = System.nanoTime();
     		}
     	}
     }
     
     private void step() {
-    	int timeLimit = maxTime * UPS;
-    	timer++;
+    	InputMirror inputs = panel.getInput();
+    	stateObj.step();
     	
-    	if((!gameGrid.getPlayerStatusAt(turn)))
-    		movesLeft = 0;
-    	
-    	if(gameGrid.getMovesNum() == 0) {
-    		if(movesLeft > 0 && gameGrid.getPlayerStatusAt(turn)) {
-	    		gameGrid.generateMoves(turn, movesLeft % 2);
-	    		generateHitboxes();
-	    		timer = 0;
-	    		movesLeft--;
-    	
-    		} else {
-	    		turn = gameGrid.getNextAlive(turn);
-	    		movesLeft = 2;
-	    		
-	    		tryWinCondition();
-    		}
-    	}
-    	
-    	hoverCheck();
-    	if(inputCheck())
-    		hitboxes.clear();
-    	
-    	/*
-    	else if(timeLimit <= timer) { // Timer check.
-    		randomMove();
-    		hitboxes.clear();
-    	}
-    	*/
-    }
-    
-    // Checks the wincondition and then transitions to the winscreen state if it suceeds.
-    private void tryWinCondition() {
-    	if(turn == gameGrid.getNextAlive(turn)) {
-    		System.out.println("Player " + (turn + 1) + " wins!");
-			System.exit(0);
-    	}
-    }
-    
-    // TODO: Figure out what bug is causing this functions to get double-called and always result in index 0.
-    private void randomMove() {
-    	double myRandom = Math.random();
-    	int index = (int)myRandom * hitboxes.size();
-    	System.out.println("Index results from : " + myRandom + " and " + hitboxes.size());
-    	if(hitboxes.size() > 0)
-    		hitboxes.get(index).forceActivate();
-    }
-    
-    private void hoverCheck() {
-    	int heldKey = panel.getHeld();
-    	int mouseX = panel.getMouseX();
-    	int mouseY = panel.getMouseY();
-    	
-    	for(InteractBox ib : hitboxes)
-    		ib.checkHover(mouseX, mouseY, heldKey);
-    }
-    
-    private boolean inputCheck() {
-    	int lastKey = panel.popKey();
-    	int heldKey = panel.getHeld();
-    	int mouseState = panel.popMouseState();
-    	int mouseX = panel.getMouseX();
-    	int mouseY = panel.getMouseY();
-    	
-    	if(mouseState == GamePanel.MOUSE_CLICK) {
-    		for(InteractBox ib : hitboxes) {
-    			if(ib.checkHit(mouseX, mouseY))
-    				 return true;
-    		}
-    	} else if(lastKey != GamePanel.KEY_EMPTY && heldKey == GamePanel.KEY_EMPTY) {
-    		for(InteractBox ib : hitboxes) {
-    			if(ib.checkBind(lastKey))
-    				return true;
-    		}
-    	}
-    	
-    	return false;
-    }
-    
-    // Generates InteractBoxes for each Interactable.
-    private void generateHitboxes() {
-    	int x, y;
-    	int totalMoves = gameGrid.getMovesNum();
-    	
-    	for(int i = 0; i < totalMoves; i++) {
-    		Selection move = gameGrid.getMoveAt(i);
-    		x = move.getX() * gridScale;
-    		y = move.getY() * gridScale;
-    		hitboxes.add(new InteractBox(move, x, y, gridScale, gridScale, move.calcKeyBind()));
-    	}
-    }
-    
-    // Updates with changes in screenscale.
-    private void updateHitboxes() {
-    	for(InteractBox ib : hitboxes)
-    		ib.updateScale(lastScale, gridScale);
+    	inputs.clearClick();
+    	inputs.clearKey();
     }
     
     // TODO: Include border elements, centered scaling.
     private void draw() {
-    	ArrayList<Entity> drawList = gameGrid.getDrawList();
     	Graphics buffer = panel.getImage().getGraphics(); // Gets the image buffer, then takes the graphics from there.
     	
-    	for(Entity e : drawList) {
-    		int x = e.getX() * gridScale;
-    		int y = e.getY() * gridScale;
-    		buffer.drawImage(spriteSheet[e.getSprite()][e.getFrame()], x, y, gridScale, gridScale, null);
-    	}
+    	stateObj.draw(buffer);
     	panel.repaint();
     }
     
-    // Calculates gridScale based on Window and Grid size.
-    public void findGridScale() {
-    	int gridSize = gameGrid.getSize();
-    	int screenSize = window.getMinSize();
-    	lastScale = gridScale;
-    	gridScale = (screenSize - SpriteList.SPRITE_DIMENSIONS / 2) / gridSize;
-    }
-
     // Loads all sprites provided in the SpriteList enum.
     private void loadSprites() {
         InputStream curStream;
@@ -225,5 +96,22 @@ public class Game implements Runnable {
                 }
             }
         }
+    }
+    
+    // Return functions for the state.
+    public InputMirror getInputMirror() {
+    	return panel.getInput();
+    }
+    
+    public int getWindowHeight() {
+    	return window.getHeight();
+    }
+    
+    public int getWindowWidth() {
+    	return window.getWidth();
+    }
+    
+    public BufferedImage getSprite(int spriteIndex, int imageIndex) {
+    	return spriteSheet[spriteIndex][imageIndex];
     }
 }

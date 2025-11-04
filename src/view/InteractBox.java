@@ -2,7 +2,7 @@ package view;
 
 // Represents the "hitbox" of elements in the game that are interactable through the user interface.
 // Could be menu items, grid elements, etc.
-// Responds to clicks and userbinds.
+// Responds to clicks and keybinds.
 public class InteractBox {
 	private int x, y, width, height;
 	private final int bind; // Represents the keyboard input ID.
@@ -43,12 +43,17 @@ public class InteractBox {
 		return false;
 	}
 	
-	public void checkHover(int clickX, int clickY, int key) {
-		//System.out.println(key);
-		if((boundsCheck(clickX, clickY)) || (key == bind))
-			parent.onHover();
-		else
+	public void checkHold(int clickX, int clickY, int key, boolean mouseHeld) {
+		if(key == bind) {
+			parent.onPress();
+		} else if(boundsCheck(clickX, clickY)) {
+			if(mouseHeld)
+				parent.onPress();
+			else
+				parent.onHover();
+		} else {
 			parent.onNothing();
+		}
 	}
 	
 	public void forceActivate() {

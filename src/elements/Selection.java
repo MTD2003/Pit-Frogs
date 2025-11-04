@@ -9,6 +9,11 @@ public class Selection extends Entity implements Interactable {
 	private Grid grid;
 	private final int playerIndex; // Remove if logic doesn't need it.
 	
+	private static final int SPR_IDLE = 0;
+	private static final int SPR_HOVER = 1;
+	private static final int SPR_HOLD = 2;
+	
+	
 	public Selection(Grid grid, int playerIndex, int x, int y) {
 		super(x, y);
 		this.grid = grid;
@@ -30,11 +35,15 @@ public class Selection extends Entity implements Interactable {
 	}
 	
 	public void onNothing() {
-		setFrame(0);
+		setFrame(SPR_IDLE);
 	}
 	
 	public void onHover() {
-		setFrame(1);
+		setFrame(SPR_HOVER);
+	}
+	
+	public void onPress() {
+		setFrame(SPR_HOLD);
 	}
 	
 	public void onActivate() {

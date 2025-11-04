@@ -16,12 +16,6 @@ public class GameView {
         mframe.setVisible(true);
     }
     
-    // Returns the screen's smallest dimension.
-    // Used for scaling the actual visuals.
-    public int getMinSize() {
-    	return Math.min(getWidth(), getHeight());
-    }
-    
     public int getHeight() {
     	int addTop = mframe.getInsets().top;
     	return (mframe.getHeight() - addTop);
