@@ -3,7 +3,7 @@ package utilities;
 public enum SpriteList {
     SPR_POINTER("/sprites/Pointer.png", 2),
     SPR_GRID_CURSOR("/sprites/grid/Cursor.png", 3),
-    SPR_PLAYER_SELECTOR("/sprites/grid/Selector.png", 1),
+    SPR_IDENTIFIER("/sprites/grid/Selector.png", 1),
     SPR_TILE("/sprites/grid/Tile.png", 1),
     SPR_PIT_CRUMBLE("/sprites/grid/Pit.png", 1),
     SPR_FROG1("/sprites/grid/Frog1.png", 2),

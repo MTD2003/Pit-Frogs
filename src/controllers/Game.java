@@ -11,7 +11,7 @@ import javax.imageio.ImageIO;
 
 public class Game implements Runnable {
     private BufferedImage[][] spriteSheet;
-    private State stateObj;
+    private State stateNow;
     private GameView window;
     private GamePanel panel;
     
@@ -21,7 +21,7 @@ public class Game implements Runnable {
     public Game() {
         window = new GameView();
         panel = new GamePanel();
-        stateObj = new GridState(this);
+        stateNow = new GridState(this);
         
         window.addComponent(panel);
         loadSprites();
@@ -54,7 +54,7 @@ public class Game implements Runnable {
     
     private void step() {
     	InputMirror inputs = panel.getInput();
-    	stateObj.step();
+    	stateNow.step();
     	
     	inputs.clearClick();
     	inputs.clearKey();
@@ -64,10 +64,19 @@ public class Game implements Runnable {
     private void draw() {
     	Graphics buffer = panel.getImage().getGraphics(); // Gets the image buffer, then takes the graphics from there.
     	
-    	stateObj.draw(buffer);
+    	stateNow.draw(buffer);
     	panel.repaint();
     }
     
+    /*
+    private void loadMenu(MenuLayout layout) {
+    	stateNow = new MenuState(layout);
+    }
+    
+    private void loadGrid(int actors, int size, int timer) {
+    	stateNow = new GridState(this, actors, size, timer);
+    }
+    */
     // Loads all sprites provided in the SpriteList enum.
     private void loadSprites() {
         InputStream curStream;
@@ -98,7 +107,6 @@ public class Game implements Runnable {
         }
     }
     
-    // Return functions for the state.
     public InputMirror getInputMirror() {
     	return panel.getInput();
     }

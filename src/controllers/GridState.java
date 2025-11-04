@@ -37,7 +37,6 @@ public class GridState implements State {
 		turn = 0;
 	}
 
-	@Override
 	public void step() {
 		int timeLimit = maxTime * Game.UPS;
     	timer++;
@@ -62,14 +61,12 @@ public class GridState implements State {
     	
     	inputProcessing();
     	
-    	System.out.println(timer);
     	if(timer == timeLimit) {
     		randomMove();
     		timer = 0;
     	}
 	}
 
-	@Override
 	public void draw(Graphics g) {
 		ArrayList<Entity> drawList = gridObj.getDrawList();
 		

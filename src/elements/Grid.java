@@ -10,7 +10,8 @@ public class Grid {
     
     private ArrayList<Selection> moves;
     private Space[][] spaces;
-    private Player[] player;
+    private Player[] players;
+    private Identifier playerID;
 
     public Grid() {
     	this(2, 6);
@@ -38,34 +39,36 @@ public class Grid {
         addPlayers();
     }
     
-    // Creating and placing player objects.
+    // Creating and placing players objects.
     private void addPlayers() {
         int j = 0;
-        player = new Player[actors];
+        players = new Player[actors];
         for(; j < 2; j++) { // Can guarantee min 2 players by game rules.
             int xy = (size - 1) * j;
-            player[j] = new Player(xy, xy , j);
+            players[j] = new Player(xy, xy , j);
             spaces[xy][xy].setBlocked(true);
         }
         for(; j < actors; j++) {
             int x = (size - 1) * (j % 2);
             int y = (size - 1) * ((j + 1) % 2);
-            player[j] = new Player(x, y, j);
+            players[j] = new Player(x, y, j);
             spaces[x][y].setBlocked(true);
         }
+        
+        playerID = new Identifier(players[0], 0, 0);
     }
     
     public void playerMove(int index, int newX, int newY) {
-    	int lastX = player[index].getX();
-    	int lastY = player[index].getY();
+    	int lastX = players[index].getX();
+    	int lastY = players[index].getY();
     	
-    	if(player[index].getPit())
+    	if(players[index].getPit())
     		spaces[lastX][lastY] = new Pit(lastX, lastY);
     	else
     		spaces[lastX][lastY].setBlocked(false);
     	
-    	player[index].setPos(newX, newY);
-    	spaces[newX][newY].onLand(player[index]); // Results in death if the space is a pit.
+    	players[index].setPos(newX, newY);
+    	spaces[newX][newY].onLand(players[index]); // Results in death if the space is a pit.
     	
     	clearMoves();
     }
@@ -83,7 +86,7 @@ public class Grid {
     // Generates player-adjacent selectables.
     // May be diagonal or horizontal.
     public void generateMoves(int index, int direction) {
-    	int[] pos = { player[index].getX(), player[index].getY() };
+    	int[] pos = { players[index].getX(), players[index].getY() };
     	int x, y;
     	
     	// Might seem weird to write a "if not" for this logic but it's to account for later game rules.
@@ -123,8 +126,11 @@ public class Grid {
     	}
     	
     	if(moves.isEmpty()) {
-    		player[index].kill();
+    		players[index].kill();
     		spaces[pos[GridConsts.X]][pos[GridConsts.Y]] = new Pit(pos[GridConsts.X], pos[GridConsts.Y]);
+    	} else {
+    		playerID.setPlayer(players[index]);
+        	playerID.update();
     	}
     }
     
@@ -142,7 +148,8 @@ public class Grid {
     		for(int x = 0; x < size; x++)
     			drawList.add(spaces[x][y]);
     	}
-    	for(Player p : player)
+    	drawList.add(playerID);
+    	for(Player p : players)
     		drawList.addLast(p);
     	for(Selection s : moves)
     		drawList.addLast(s);
@@ -159,18 +166,18 @@ public class Grid {
     }
     
     public Player getPlayerAt(int index) {
-    	return player[index];
+    	return players[index];
     }
     
     public boolean getPlayerStatusAt(int index) {
-    	return player[index].isActive();
+    	return players[index].isActive();
     }
     
-    // Gets the next alive player for the turn count.
+    // Gets the next alive players for the turn count.
     public int getNextAlive(int current) {
     	for(int count = 0; count < actors; count++) {
     		current = (current + 1) % actors;
-    		if(player[current].isActive())
+    		if(players[current].isActive())
     			return current;
     	}
     	
