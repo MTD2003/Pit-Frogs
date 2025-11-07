@@ -19,12 +19,12 @@ public class Game implements Runnable {
     public static final int UPS = 120;
     
     public static final int SCREEN_WIDTH = 544;
-    public static final int SCREEN_HEIGHT = 652;
+    public static final int SCREEN_HEIGHT = 626;
     
     public Game() {
         window = new GameView();
         panel = new GamePanel();
-        stateNow = new GridState(this);
+        stateNow = new MenuState(this);
         
         window.addComponent(panel);
         loadSprites();
@@ -71,15 +71,10 @@ public class Game implements Runnable {
     	panel.repaint();
     }
     
-    /*
-    private void loadMenu(MenuLayout layout) {
-    	stateNow = new MenuState(layout);
+    public void swapState(State stateNew) {
+    	stateNow = stateNew;
     }
     
-    private void loadGrid(int actors, int size, int timer) {
-    	stateNow = new GridState(this, actors, size, timer);
-    }
-    */
     // Loads all sprites provided in the SpriteList enum.
     private void loadSprites() {
         InputStream curStream;

@@ -97,10 +97,9 @@ public class GridState implements State {
 	public void loadText() {
 		int fontSize = 24;
 		Font fontBasic = new Font("Consolas", Font.PLAIN, fontSize);
-		countTurn = new MenuText("", 0, Game.SCREEN_HEIGHT - fontSize, fontSize, fontBasic);
-		countPlayer = new MenuText("", 0, countTurn.getY() - fontSize, fontSize, fontBasic);
-		countTime = new MenuText("", Game.SCREEN_WIDTH - fontSize * 4, countPlayer.getY(), fontSize * 2, fontBasic);
-		
+		countTurn = new MenuText("", 8, Game.SCREEN_HEIGHT - fontSize, fontSize, fontBasic);
+		countPlayer = new MenuText("", 8, countTurn.getY() - fontSize, fontSize, fontBasic);
+		countTime = new MenuText("", Game.SCREEN_WIDTH - fontSize * 4, countTurn.getY(), fontSize * 3, fontBasic);
 	}
 	
 	// Will handle scaling later.
@@ -113,7 +112,6 @@ public class GridState implements State {
 		countTurn.setText("Turn " + turn);
 		countPlayer.setText("Player " + (index + 1));
 		countTime.setText(strTime);
-		System.out.println(strTime);
 	}
 	
 	private void inputProcessing() {

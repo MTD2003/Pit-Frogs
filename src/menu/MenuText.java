@@ -56,6 +56,10 @@ public class MenuText {
 		this.y = y;
 	}
 	
+	public void setText(int text) {
+		this.text = String.valueOf(text);
+	}
+	
 	public void setText(String text) {
 		this.text = text;
 	}
