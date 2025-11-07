@@ -17,7 +17,7 @@ public class MenuState implements State {
 	private Game gameObj;
 	private SpecialButton btnSpec;
 	private ChangeButton[] buttons;
-	private MenuText[] menuValues;
+	private MenuText[] menuLabels;
 	private ArrayList<InteractBox> hitboxes;
 	
 	// Not my favorite way to do this, but it is a way.
@@ -32,7 +32,7 @@ public class MenuState implements State {
 		
 		argGrid = new int[3];
 		argGrid[PLAYERS] = GridConsts.MIN_PLAYERS;
-		argGrid[SPACES] = GridConsts.MIN_SIZE;
+		argGrid[SPACES] = GridConsts.MIN_SIZE + 1;
 		argGrid[TIMER] = GridConsts.MAX_TIMER / 2;
 		
 		loadText();
@@ -41,23 +41,35 @@ public class MenuState implements State {
 	}
 	
 	private void loadText() {
+		int xCur, yCur;
 		int fontSize = 48;
-		int height = Game.SCREEN_HEIGHT / 2 + fontSize * 2;
-		int width = (Game.SCREEN_WIDTH - fontSize) / 6;
+		int y = Game.SCREEN_HEIGHT / 2 + fontSize * 2;
+		int x = (Game.SCREEN_WIDTH - fontSize) / 6;
 		Font fontBasic = new Font("Consolas", Font.PLAIN, fontSize);
+		menuLabels = new MenuText[6];
 		
-		menuValues = new MenuText[3];
-		menuValues[PLAYERS] = new MenuText("", width, height, fontSize, fontBasic);
-		menuValues[SPACES] = new MenuText("", width * 3, height, fontSize, fontBasic);
-		menuValues[TIMER] = new MenuText("", width * 5, height, fontSize, fontBasic);
+		xCur = x + 12;
+		yCur = y + fontSize * 3;
+		menuLabels[PLAYERS] = new MenuText("", xCur, y, fontSize, fontBasic);
+		menuLabels[PLAYERS + 3] = new MenuText("Players", xCur - 32, y + fontSize * 3, fontSize / 2, fontBasic);
+		
+		xCur = (int)(x * 2.8);
+		menuLabels[SPACES] = new MenuText("", xCur, y, fontSize, fontBasic);
+		menuLabels[SPACES + 3] = new MenuText("Grid", xCur + 10, yCur, fontSize / 2, fontBasic);
+		
+		xCur = (int)(x * 4.9);
+		menuLabels[TIMER] = new MenuText("", xCur, y, fontSize, fontBasic);
+		menuLabels[TIMER + 3] = new MenuText("Timer", xCur - 6, yCur, fontSize / 2, fontBasic);
+		
 		// Special button is a version of MenuText... may change later.
-		btnSpec = new SpecialButton(this, "START GAME", width - fontSize / 5, height / 2, (int)(fontSize * 1.5), fontBasic);
+		btnSpec = new SpecialButton(this, "START GAME", x - fontSize / 5, y / 2, (int)(fontSize * 1.5), fontBasic);
 	}
 	
 	private void updateText() {
-		menuValues[PLAYERS].setText(argGrid[PLAYERS]);
-		menuValues[SPACES].setText(argGrid[SPACES]);
-		menuValues[TIMER].setText(argGrid[TIMER]);
+		menuLabels[PLAYERS].setText(argGrid[PLAYERS]);
+		menuLabels[SPACES].setText(argGrid[SPACES] + "x" + argGrid[SPACES]);
+		String timerText = String.format("%02d", argGrid[TIMER]);
+		menuLabels[TIMER].setText(timerText);
 	}
 	
 	private void loadButtons() {
@@ -86,7 +98,8 @@ public class MenuState implements State {
 			InteractBox ib = new InteractBox(btn, btn.getX(), btn.getY(), scale, scale);
 			hitboxes.add(ib);
 		}
-		InteractBox special = new InteractBox(btnSpec, btnSpec.getX(), btnSpec.getY(), btnSpec.deriveWidth(), (int)btnSpec.getSize());
+		
+		InteractBox special = new InteractBox(btnSpec, btnSpec.getX(), btnSpec.getTrueY(), btnSpec.deriveWidth(), (int)btnSpec.getSize());
 		hitboxes.add(special);
 	}
 	
@@ -137,7 +150,7 @@ public class MenuState implements State {
 			g.drawImage(sprite, btn.getX(), btn.getY(), scale, scale, null);
 		}
 		
-		for(MenuText text : menuValues)
+		for(MenuText text : menuLabels)
 			text.selfDraw(g);
 		
 		btnSpec.selfDraw(g);

@@ -16,6 +16,10 @@ public class SpecialButton extends MenuText implements Interactable {
 		this.fontBase = fontBase;
 	}
 	
+	public int getTrueY() {
+		return (int)(getY() - getSize() * 0.8);
+	}
+	
 	public void onNothing() {
 		setFont(fontBase);
 	}
@@ -25,7 +29,7 @@ public class SpecialButton extends MenuText implements Interactable {
 	}
 	
 	public void onPress() {
-		
+		setFont(fontBase.deriveFont(getSize() - 4));
 	}
 	
 	public void onActivate() {

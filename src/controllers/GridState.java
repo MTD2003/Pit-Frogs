@@ -44,7 +44,7 @@ public class GridState implements State {
 	}
 
 	public void step() {
-		int timeLimit = maxTime * Game.UPS;
+		int timeLimit = maxTime * Game.UPS + 60; // 60 update time limit delay improves gamefeel.
     	timer++;
     	
     	if((!gridObj.getPlayerStatusAt(index)))
@@ -105,9 +105,7 @@ public class GridState implements State {
 	// Will handle scaling later.
 	public void updateText() {
 		int truTime = maxTime - timer / Game.UPS;
-		String strTime = Integer.toString(truTime);
-		if(truTime / 10 == 0)
-			strTime = "0" + strTime;
+		String strTime = String.format("%02d", truTime);
 		
 		countTurn.setText("Turn " + turn);
 		countPlayer.setText("Player " + (index + 1));
@@ -191,8 +189,8 @@ public class GridState implements State {
     
 	private void tryWinCondition() {
     	if(index == gridObj.getNextAlive(index)) {
-    		System.out.println("Player " + (index + 1) + " wins!");
-			System.exit(0);
+    		WinState winscreen = new WinState(gameObj, gridObj, gridScale, index);
+    		gameObj.swapState(winscreen);
     	}
     }
 }

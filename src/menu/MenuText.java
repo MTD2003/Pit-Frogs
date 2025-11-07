@@ -25,7 +25,7 @@ public class MenuText {
 	}
 	
 	public int deriveWidth() {
-		return (int)(text.length() * textSize);
+		return (int)(text.length() * textSize / 1.8);
 	}
 	
 	public int getX() {

@@ -157,6 +157,18 @@ public class Grid {
     	return drawList;
     }
     
+    // Similar to getDrawList(), primarily for the WinState.
+    // Technically inefficient (players can die on the same space, duplicates can be added), but not meaningfully so.
+    public ArrayList<Entity> getPlayerSpaces() {
+    	ArrayList<Entity> playerList = new ArrayList<Entity>();
+    	for(Player p : players) {
+    		playerList.add(p);
+    		playerList.addFirst(spaces[p.getX()][p.getY()]);
+    	}
+    	
+    	return playerList;
+    }
+    
     public int getMovesNum() {
     	return moves.size();
     }
