@@ -71,8 +71,8 @@ public class Game implements Runnable {
     	panel.repaint();
     }
     
-    public void swapState(State stateNew) {
-    	stateNow = stateNew;
+    public void swapState(State stateNext) {
+    	this.stateNow = stateNext;
     }
     
     // Loads all sprites provided in the SpriteList enum.

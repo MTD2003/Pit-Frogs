@@ -10,7 +10,7 @@ public class ChangeButton extends Entity implements Interactable {
 	private final int index;
 	private final int modifier;
 	
-	public ChangeButton(MenuState parent, int index, int modifier, int x, int y) {
+	public ChangeButton(MenuState parent, int x, int y, int index, int modifier) {
 		super(x, y);
 		
 		this.parent = parent;
