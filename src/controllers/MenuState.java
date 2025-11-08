@@ -43,7 +43,7 @@ public class MenuState implements State {
 	private void loadText() {
 		int xCur, yCur;
 		int fontSize = 48;
-		int y = Game.SCREEN_HEIGHT / 2 + fontSize * 2;
+		int y = Game.SCREEN_HEIGHT / 2;
 		int x = (Game.SCREEN_WIDTH - fontSize) / 6;
 		Font fontBasic = new Font("Consolas", Font.PLAIN, fontSize);
 		menuLabels = new MenuText[6];
@@ -78,7 +78,7 @@ public class MenuState implements State {
 		buttons = new ChangeButton[TIMER * 3];
 		
 		x = (Game.SCREEN_WIDTH - scale) / 7;
-		y = (Game.SCREEN_HEIGHT - scale) / 2;
+		y = (Game.SCREEN_HEIGHT - scale) / 3;
 		for(int i = 0; i < TIMER * 3; i++) {
 			xOffset = (scale * 2) * (i / 2);
 			yOffset = (scale * 2) * (i % 2);

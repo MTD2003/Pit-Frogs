@@ -6,6 +6,7 @@ public class Player extends Entity {
 	private boolean active;
 	
 	private static final int IN_PIT = 1;
+	private static final int WIN_POSE = 2;
 	
     public Player(int x, int y, int index) {
         super(x, y);
@@ -17,6 +18,10 @@ public class Player extends Entity {
     public void kill() {
     	active = false;
     	setFrame(IN_PIT);
+    }
+    
+    public void win() {
+    	setFrame(WIN_POSE);
     }
     
     public boolean isActive() {

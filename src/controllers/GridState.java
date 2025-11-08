@@ -18,6 +18,7 @@ public class GridState implements State {
 	private final Game gameObj;
 	private final Grid gridObj;
 	private MenuText countTurn, countPlayer, countTime;
+	private MenuText tutorial;
 	
 	private final int maxTime;
 	private int timer, index, turn, movesLeft;
@@ -58,6 +59,7 @@ public class GridState implements State {
 	    		movesLeft--;
     	
     		} else {
+    			tutorial.setText("<Avoid the Pitfalls>");
 	    		index = gridObj.getNextAlive(index);
 	    		movesLeft = 2;
 	    		turn++;
@@ -92,14 +94,19 @@ public class GridState implements State {
     	countTurn.selfDraw(g);
     	countPlayer.selfDraw(g);
     	countTime.selfDraw(g);
+    	tutorial.selfDraw(g);
 	}
 	
 	public void loadText() {
 		int fontSize = 24;
+		int x = 8;
+		int y = Game.SCREEN_HEIGHT - fontSize;
 		Font fontBasic = new Font("Consolas", Font.PLAIN, fontSize);
-		countTurn = new MenuText("", 8, Game.SCREEN_HEIGHT - fontSize, fontSize, fontBasic);
-		countPlayer = new MenuText("", 8, countTurn.getY() - fontSize, fontSize, fontBasic);
-		countTime = new MenuText("", Game.SCREEN_WIDTH - fontSize * 4, countTurn.getY(), fontSize * 3, fontBasic);
+		countTurn = new MenuText("", x, y, fontSize, fontBasic);
+		countPlayer = new MenuText("", x, y - fontSize, fontSize, fontBasic);
+		countTime = new MenuText("", Game.SCREEN_WIDTH - fontSize * 4, y, fontSize * 3, fontBasic);
+		
+		tutorial = new MenuText("<Control with Mouse>", Game.SCREEN_WIDTH / 4 + 32, y - fontSize / 2, fontSize - 4, fontBasic);
 	}
 	
 	// Will handle scaling later.
@@ -157,7 +164,7 @@ public class GridState implements State {
     	int size = Math.min(width, height);
     	
     	lastScale = gridScale;
-    	gridScale = (size - SpriteList.SPRITE_DIMENSIONS / 2) / gridSize;
+    	gridScale = (size - SpriteList.SPRITE_DIMENSIONS) / gridSize;
     }
     
     // Generates InteractBoxes for each Interactable.
@@ -190,6 +197,7 @@ public class GridState implements State {
 	private void tryWinCondition() {
     	if(index == gridObj.getNextAlive(index)) {
     		WinState winscreen = new WinState(gameObj, gridObj, gridScale, index);
+    		gridObj.getPlayerAt(index).win();
     		gameObj.swapState(winscreen);
     	}
     }

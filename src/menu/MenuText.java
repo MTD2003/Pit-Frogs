@@ -64,8 +64,8 @@ public class MenuText {
 		this.text = text;
 	}
 	
-	public void setSize(int textSize) {
-		this.textSize = textSize;
+	public void setSize(float sizeBase) {
+		this.textSize = sizeBase;
 	}
 	
 	public void setFont(Font textFont) {

@@ -10,8 +10,8 @@ public class SpecialButton extends MenuText implements Interactable {
 	private MenuState parent;
 	private Font fontBase;
 	
-	public SpecialButton(MenuState parent, String text, int x, int y, float textSize, Font fontBase) {
-		super(text, x, y, textSize, fontBase);
+	public SpecialButton(MenuState parent, String text, int x, int y, float sizeBase, Font fontBase) {
+		super(text, x, y, sizeBase, fontBase);
 		this.parent = parent;
 		this.fontBase = fontBase;
 	}
@@ -29,12 +29,10 @@ public class SpecialButton extends MenuText implements Interactable {
 	}
 	
 	public void onPress() {
-		setFont(fontBase.deriveFont(getSize() - 4));
+		setFont(fontBase.deriveFont(Font.ITALIC));
 	}
 	
 	public void onActivate() {
 		parent.menuSpecialFunction();
 	}
-	
-	
 }
