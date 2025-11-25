@@ -20,20 +20,19 @@ public class MenuState implements State {
 	private MenuText[] menuLabels;
 	private ArrayList<InteractBox> hitboxes;
 	
-	// Not my favorite way to do this, but it is a way.
 	private int scale;
-	private int[] argGrid; 
 	private static final int PLAYERS = 0;
 	private static final int SPACES = 1;
 	private static final int TIMER = 2;
+	// Not my favorite way to do this, but it is a way.
+	private static int[] argGrid = { 
+			GridConsts.MIN_PLAYERS,
+			GridConsts.MIN_SIZE + 1,
+			GridConsts.MAX_TIMER / 2
+	};
 	
 	public MenuState(Game gameObj) {
 		this.gameObj = gameObj;
-		
-		argGrid = new int[3];
-		argGrid[PLAYERS] = GridConsts.MIN_PLAYERS;
-		argGrid[SPACES] = GridConsts.MIN_SIZE + 1;
-		argGrid[TIMER] = GridConsts.MAX_TIMER / 2;
 		
 		loadText();
 		loadButtons();
@@ -157,7 +156,7 @@ public class MenuState implements State {
 	}
 	
 	public void changePlanters(int index, int modifier) {
-		if(index < argGrid.length) {
+		if(index < argGrid.length) { // Error-prevention
 			argGrid[index] += modifier;
 			
 			argGrid[PLAYERS] = checkMinMax(argGrid[PLAYERS], GridConsts.MIN_PLAYERS, GridConsts.MAX_PLAYERS);
