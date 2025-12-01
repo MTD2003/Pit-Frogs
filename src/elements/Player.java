@@ -38,10 +38,17 @@ public class Player extends Entity {
     
     public void setPlayerSprite(int index) {
     	switch(index) {
-    		case 0 -> setSprite(SpriteList.SPR_FROG1);
-    		case 1 -> setSprite(SpriteList.SPR_FROG2);
-    		case 2 -> setSprite(SpriteList.SPR_FROG3);
-    		default -> setSprite(SpriteList.SPR_FROG4);
+    		case 0:
+    			setSprite(SpriteList.SPR_FROG1);
+    			break;
+    		case 1:
+    			setSprite(SpriteList.SPR_FROG2);
+    			break;
+    		case 2:
+    			setSprite(SpriteList.SPR_FROG3);
+    			break;
+    		default:
+    			setSprite(SpriteList.SPR_FROG4);
     	}
     }
 

@@ -150,9 +150,9 @@ public class Grid {
     	}
     	drawList.add(playerID);
     	for(Player p : players)
-    		drawList.addLast(p);
+    		drawList.add(p);
     	for(Selection s : moves)
-    		drawList.addLast(s);
+    		drawList.add(s);
     	
     	return drawList;
     }
@@ -163,7 +163,7 @@ public class Grid {
     	ArrayList<Entity> playerList = new ArrayList<Entity>();
     	for(Player p : players) {
     		playerList.add(p);
-    		playerList.addFirst(spaces[p.getX()][p.getY()]);
+    		playerList.add(0, spaces[p.getX()][p.getY()]);
     	}
     	
     	return playerList;
