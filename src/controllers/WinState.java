@@ -30,7 +30,7 @@ public class WinState implements State {
 	
 	private void loadText() {
 		String winString;
-		String exitString = "Press ESC key to return to main menu";
+		String exitString = "Press R for Rematch, ESC for Main Menu";
 		if(windex == -1)
 			winString = "NOBODY WINS!";
 		else
@@ -51,6 +51,11 @@ public class WinState implements State {
 		if(lastKey == KeyEvent.VK_ESCAPE) {
 			MenuState menuscreen = new MenuState(gameObj);
 			gameObj.swapState(menuscreen);
+		}
+		
+		if(lastKey == KeyEvent.VK_R) {
+			GridState gridscreen = new GridState(gameObj);
+			gameObj.swapState(gridscreen);
 		}
 	}
 	

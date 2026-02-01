@@ -3,7 +3,6 @@ package controllers;
 import menu.ChangeButton;
 import menu.MenuText;
 import menu.SpecialButton;
-import utilities.GridConsts;
 import utilities.InputMirror;
 import utilities.SpriteList;
 import view.InteractBox;
@@ -24,12 +23,6 @@ public class MenuState implements State {
 	private static final int PLAYERS = 0;
 	private static final int SPACES = 1;
 	private static final int TIMER = 2;
-	// Not my favorite way to do this, but it is a way.
-	private static int[] argGrid = { 
-			GridConsts.MIN_PLAYERS,
-			GridConsts.MIN_SIZE + 1,
-			GridConsts.MAX_TIMER / 2
-	};
 	
 	public MenuState(Game gameObj) {
 		this.gameObj = gameObj;
@@ -65,9 +58,14 @@ public class MenuState implements State {
 	}
 	
 	private void updateText() {
-		menuLabels[PLAYERS].setText(argGrid[PLAYERS]);
-		menuLabels[SPACES].setText(argGrid[SPACES] + "x" + argGrid[SPACES]);
-		String timerText = String.format("%02d", argGrid[TIMER]);
+		int settingP = GridState.getPlayerP();
+		int settingS = GridState.getSizeP();
+		int settingT = GridState.getTimeP();
+		
+		String timerText = String.format("%02d", settingT);
+		
+		menuLabels[PLAYERS].setText(settingP);
+		menuLabels[SPACES].setText(settingS + "x" + settingS);
 		menuLabels[TIMER].setText(timerText);
 	}
 	
@@ -104,10 +102,6 @@ public class MenuState implements State {
 	
 	private void updateHitboxes() {
 		// Blank for now.
-	}
-	
-	private int checkMinMax(int value, int minVal, int maxVal) {
-		return Math.min(maxVal, Math.max(value, minVal));
 	}
 	
 	// Near carbon copy of GridState logic, should be moved to Game for reusability(?)
@@ -156,17 +150,25 @@ public class MenuState implements State {
 	}
 	
 	public void changePlanters(int index, int modifier) {
-		if(index < argGrid.length) { // Error-prevention
-			argGrid[index] += modifier;
-			
-			argGrid[PLAYERS] = checkMinMax(argGrid[PLAYERS], GridConsts.MIN_PLAYERS, GridConsts.MAX_PLAYERS);
-			argGrid[SPACES] = checkMinMax(argGrid[SPACES], GridConsts.MIN_SIZE, GridConsts.MAX_SIZE);
-			argGrid[TIMER] = checkMinMax(argGrid[TIMER], GridConsts.MIN_TIMER, GridConsts.MAX_TIMER);
+		int origVal;
+		switch(index) {
+			case 0:
+				origVal = GridState.getPlayerP();
+				GridState.setPlayerP(origVal + modifier);
+				break;
+			case 1:
+				origVal = GridState.getSizeP();
+				GridState.setSizeP(origVal + modifier);
+				break;
+			case 2:
+				origVal = GridState.getTimeP();
+				GridState.setTimeP(origVal + modifier);
+				break;
 		}
 	}
 	
 	public void menuSpecialFunction() {
-		GridState stateNew = new GridState(gameObj, argGrid[PLAYERS], argGrid[SPACES], argGrid[TIMER]);
+		GridState stateNew = new GridState(gameObj);
 		gameObj.swapState(stateNew);
 	}
 }

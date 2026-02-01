@@ -4,6 +4,7 @@ import elements.Entity;
 import elements.Grid;
 import elements.Selection;
 import menu.MenuText;
+import utilities.GridConsts;
 import utilities.InputMirror;
 import utilities.SpriteList;
 import view.InteractBox;
@@ -20,15 +21,20 @@ public class GridState implements State {
 	private MenuText countTurn, countPlayer, countTime;
 	private MenuText tutorial;
 	
+	private static int playerPlanter = GridConsts.MIN_PLAYERS;
+    private static int sizePlanter = GridConsts.MIN_SIZE + 1;
+	private static int timePlanter = GridConsts.MAX_TIMER / 2;
+	
 	private final int maxTime;
 	private int timer, index, turn, movesLeft;
 	private int gridScale, lastScale;
 	
+	// Outside objects may only construct an object with planter parameters.
 	public GridState(Game gameObj) {
-		this(gameObj, 2, 6, 15);
+		this(gameObj, playerPlanter, sizePlanter, timePlanter);
 	}
 	
-	public GridState(Game gameObj, int actors, int size, int maxTime) {
+	private GridState(Game gameObj, int actors, int size, int maxTime) {
 		this.gameObj = gameObj;
 		this.maxTime = maxTime;
 		
@@ -201,4 +207,34 @@ public class GridState implements State {
     		gameObj.swapState(winscreen);
     	}
     }
+	
+	// Helper function for setting Grid Parameters.
+	private static int checkMinMax(int value, int minVal, int maxVal) {
+		return Math.min(maxVal, Math.max(value, minVal));
+	}
+	
+	public static int getPlayerP() {
+		return playerPlanter;
+	}
+	
+	public static int getSizeP() {
+		return sizePlanter;
+	}
+	
+	public static int getTimeP() {
+		return timePlanter;
+	}
+	
+	public static void setPlayerP(int pp) {
+		playerPlanter = checkMinMax(pp, GridConsts.MIN_PLAYERS, GridConsts.MAX_PLAYERS);
+	}
+	
+	public static void setSizeP(int sp) {
+		sizePlanter = checkMinMax(sp, GridConsts.MIN_SIZE, GridConsts.MAX_SIZE);
+	}
+	
+	public static void setTimeP(int tp) {
+		System.out.println(tp);
+		timePlanter = checkMinMax(tp, GridConsts.MIN_TIMER, GridConsts.MAX_TIMER);
+	}
 }
