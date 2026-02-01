@@ -1,4 +1,5 @@
 package elements;
+import bots.BitGrid;
 import utilities.GridConsts;
 
 import java.util.ArrayList;
@@ -155,6 +156,21 @@ public class Grid {
     		drawList.add(s);
     	
     	return drawList;
+    }
+    
+    // Returns a BitGrid representation of the board.
+    // Pit and Player spaces return true, all else returns false.
+    public BitGrid getBitGrid() {
+    	BitGrid myGrid = new BitGrid(size);
+    	
+    	for(int y = 0; y < size; y++) {
+    		for(int x = 0; x < size; x++) {
+    			if(spaces[x][y] instanceof Pit || spaces[x][y].isBlocked())
+					myGrid.setBit(true, x, y);
+    		}
+    	}
+    	
+    	return myGrid;
     }
     
     // Similar to getDrawList(), primarily for the WinState.
