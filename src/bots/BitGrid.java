@@ -15,9 +15,20 @@ public class BitGrid {
 		this.gridBits = gridBits;
 	}
 	
-	private int convertPos(int x, int y) {
+	public BitGrid(BitGrid bitGrid) {
+		this.dimensions = bitGrid.getDimensions();
+		this.gridBits = bitGrid.getBits();
+	}
+	
+	public int convertPos(int x, int y) {
 		return x + y * (dimensions);
 	}
+	
+	/* Function for reversing index into an x and y.
+	public GridPos convertPos(int index) {
+		return (new GridPos(index % dimensions, index / dimensions));
+	}
+	*/
 	
 	public int getDimensions() {
 		return dimensions;
