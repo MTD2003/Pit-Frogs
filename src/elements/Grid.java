@@ -165,9 +165,14 @@ public class Grid {
     	
     	for(int y = 0; y < size; y++) {
     		for(int x = 0; x < size; x++) {
-    			if(spaces[x][y] instanceof Pit || spaces[x][y].isBlocked())
+    			if(spaces[x][y] instanceof Pit)
 					myGrid.setBit(true, x, y);
     		}
+    	}
+    	
+    	for(Player p  : players) {
+    		myGrid.setBit(true, p.getX(), p.getY());
+    		myGrid.setPlayer(true, p.getX(), p.getY());
     	}
     	
     	return myGrid;

@@ -5,9 +5,8 @@ import java.util.ArrayList;
 
 public class NaiveAgent {
 	private int x, y;
-	private int move, nextMove;
-	private int evalRecord; // Keeps track of the evaluation record for the search.
 	private BitGrid position;
+	private MoveTuple bestMove;
 	private final int maxDepth; // Not a bad idea to change into nodes...
 	
 	public NaiveAgent(int x, int y, int maxDepth) {
@@ -23,10 +22,25 @@ public class NaiveAgent {
 	}
 	
 	private int search(BitGrid sPosition, int index, int depth) {
-		int newMoveIndex
+		MoveTuple curMove;
 		// Move generation ???
+		// Doesn't matter what order we generate / search these moves.
+		// 16 total moves, divisible by four. Matching values are never found together.
+		// 12 unique ending positions...
+		for(int x = -2; x <= 2; x++) {
+			for(int y = -2; y <= 2; y++) {
+				curMove = new MoveTuple(-1, -1, -1, -1);
+			}
+		}
+		/* End Positions. Need to account for movement paths.
+		 * [ , ]   [-1,2]  [ , ]   [1,2]   [ , ]
+		 * [-2,1]  [ , ]   [0,1]   [ , ]   [2,1]
+		 * [ , ]   [-1,0]  [ , ]   [1,0]   [ , ]
+		 * [-2,-1] [ , ]   [0,-1]  [ , ]   [2,-1]
+		 * [ , ]   [-1,-2] [ , ]   [1,-2]  [ , ]
+		 */
 		
-		// Ideas and Notes
+		/* Ideas and Notes
 		depth += 1;
 		if(true) {
 			if(depth >= maxDepth * 2) { // Pit Frogs is a 2-move per turn game.
@@ -39,6 +53,7 @@ public class NaiveAgent {
 				return search(sPosition, sX, sY, depth, maxDepth) + 1;
 			}
 		}
+		*/
 		
 		return -1;
 	}
