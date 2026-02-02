@@ -50,6 +50,30 @@ public class BitGrid {
 		return nextGrid;
 	}
 	
+	// Compares the gridBits and playerBits with a newly generated positional BitSet.
+	// -1 if move is illegal (player-to-player), 0 if move is loss (into pit), 1 if move is survivable.
+	public int evalResult(MoveTuple move, int moverIndex) {
+		BitSet moveBits = new BitSet(dimensions * dimensions);
+		int firstIndex = moverIndex + convertPos(move.getFirstX(), move.getFirstY());
+		int endIndex = firstIndex + convertPos(move.getFinalX(), move.getFinalY());
+		int eval = 1;
+		
+		moveBits.set(firstIndex);
+		moveBits.set(endIndex);
+		
+		if(moveBits.intersects(gridBits)) // eval = 0 if intersects a pit.
+			eval--;
+		
+		// Remember to "kill" the player bit when they fall into a pit, as that does not count as a block.
+		// This works for the naive agent but will need to  be changed for the smart agent.
+		if(moveBits.intersects(playerBits)) // eval = -1 if intersects player bit.
+			eval--;
+		
+		System.out.println(eval);
+		
+		return eval;
+	}
+	
 	public int getDimensions() {
 		return dimensions;
 	}
