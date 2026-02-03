@@ -71,8 +71,8 @@ public class GridState implements State {
 	    		movesLeft = 2;
 	    		turn++;
 	    		
-	    		MoveTuple move = new MoveTuple(1, 0, 1, 1);
-	    		gridObj.getBitGrid().evalResult(move, 0);
+	    		// MoveTuple move = new MoveTuple(1, 0, 1, 1);
+	    		// gridObj.getBitGrid().evalResult(move, 0);
 	    		tryWinCondition();
     		}
     	}

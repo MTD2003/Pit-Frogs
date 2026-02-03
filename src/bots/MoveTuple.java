@@ -1,30 +1,48 @@
 package bots;
 
-// Primarily used to simplify the move making process for agents.
+// Easier to read and more type safe than int[]
+// TODO: Go back through the Grid move generation and design to accomodate.
 public class MoveTuple {
-	private int[] firstPos = {0, 0}; // Always a length of 2.
-	private int[] finalPos = {0, 0};
+	private int x, y;
 	
-	public MoveTuple(int x1, int y1, int x2, int y2) {
-		firstPos[0] = x1;
-		firstPos[1] = y1;
-		finalPos[0] = x2;
-		finalPos[1] = y2;
+	private MoveTuple(int x, int y) {
+		this.x = x;
+		this.y = y;
 	}
 	
-	public int getFirstX() {
-		return firstPos[0];
+	// Returns a movement vector based on given integer.
+	// This is lazy but also probably the most efficient way.
+	public static MoveTuple genMove(int dir) {
+		switch(dir) {
+			case 0:
+				return new MoveTuple(0, 1); // North
+			case 1:
+				return new MoveTuple(1, 1); // North-west
+			case 2:
+				return new MoveTuple(1, 0); // West, etc...
+			case 3:
+				return new MoveTuple(1, -1);
+			case 4:
+				return new MoveTuple(0, -1);
+			case 5:
+				return new MoveTuple(-1, -1);
+			case 6:
+				return new MoveTuple(-1, 0);
+			default:
+				return new MoveTuple(-1, 1);
+		}
 	}
 	
-	public int getFirstY() {
-		return firstPos[1];
+	public int getX() {
+		return x;
 	}
 	
-	public int getFinalX() {
-		return finalPos[0];
+	public int getY() {
+		return y;
 	}
 	
-	public int getFinalY() {
-		return finalPos[1];
+	public int[] getVector() {
+		int[] newInt = {x, y};
+		return newInt;
 	}
 }

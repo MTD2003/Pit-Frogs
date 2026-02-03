@@ -3,10 +3,12 @@ import view.InteractBox;
 
 import java.util.ArrayList;
 
+// TODO: Cleanup logic after UI implementation.
+// TODO: Implement / test in base game.
 public class NaiveAgent {
 	private int x, y;
 	private BitGrid position;
-	private MoveTuple bestMove;
+	private MoveTuple bestMove, nextMove;
 	private final int maxDepth; // Not a bad idea to change into nodes...
 	
 	public NaiveAgent(int x, int y, int maxDepth) {
@@ -22,40 +24,48 @@ public class NaiveAgent {
 	}
 	
 	private int search(BitGrid sPosition, int index, int depth) {
-		MoveTuple curMove;
-		// Move generation ???
-		// Doesn't matter what order we generate / search these moves.
-		// 16 total moves, divisible by four. Matching values are never found together.
-		// 12 unique ending positions...
-		for(int x = -2; x <= 2; x++) {
-			for(int y = -2; y <= 2; y++) {
-				curMove = new MoveTuple(-1, -1, -1, -1);
-			}
-		}
-		/* End Positions. Need to account for movement paths.
-		 * [ , ]   [-1,2]  [ , ]   [1,2]   [ , ]
-		 * [-2,1]  [ , ]   [0,1]   [ , ]   [2,1]
-		 * [ , ]   [-1,0]  [ , ]   [1,0]   [ , ]
-		 * [-2,-1] [ , ]   [0,-1]  [ , ]   [2,-1]
-		 * [ , ]   [-1,-2] [ , ]   [1,-2]  [ , ]
-		 */
+		int bestEval = -1;
 		
-		/* Ideas and Notes
-		depth += 1;
-		if(true) {
-			if(depth >= maxDepth * 2) { // Pit Frogs is a 2-move per turn game.
+		// depth % 2 = 0 -> orthogonal
+		for(int i = depth % 2; i < 7; i += 2) {
+			int sEval = 0;
+			MoveTuple move = MoveTuple.genMove(i);
+			
+			if(!sPosition.isLegal(move, index)) // Don't evaluate illegal moves.
+				continue;
+			
+			if(!sPosition.isDead(move, index)) {
+				if(depth < maxDepth) {
+					int nextIndex = index + sPosition.convertPos(move.getX(), move.getY());
+					boolean dropPit = (depth % 2 == 1);
+					BitGrid nextPosition = sPosition.doMove(move, index, dropPit);
+					
+					sEval = 1 + search(nextPosition, nextIndex, (depth + 1));
 				
-			} else {
-				if(depth % 2 == 0) {
-					BitGrid nPosition = BitGrid(sPosition);
-					sPosition.setBit(true, sX, sY);
+				} else {
+					sEval = 1;
 				}
-				return search(sPosition, sX, sY, depth, maxDepth) + 1;
+			}
+			
+			if(sEval > bestEval) {
+				bestEval = sEval;
+				setMove(move);
 			}
 		}
-		*/
 		
-		return -1;
+		return bestEval; // Base case: Returns -1 if no legal moves can be made, 0 if the move would kill the player, 1 if it wouldn't.
+	}
+	
+	public MoveTuple popMove() {
+		MoveTuple oldMove = bestMove;
+		bestMove = nextMove;
+		//nextMove = null; (?)
+		return oldMove;
+	}
+	
+	public void setMove(MoveTuple newMove) {
+		nextMove = bestMove;
+		bestMove = newMove;
 	}
 	
 	public void setPosition(BitGrid position) {

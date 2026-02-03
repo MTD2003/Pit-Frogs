@@ -35,23 +35,38 @@ public class BitGrid {
 	*/
 	
 	// Returns a new grid after applying a MoveTuple.
-	public BitGrid doMove(MoveTuple move, int moverIndex) {
+	// TODO: Redo this to make sense with movement generation.
+	public BitGrid doMove(MoveTuple move, int lastIndex, boolean dropPit) {
 		BitGrid nextGrid = new BitGrid(this);
-		int pitIndex = moverIndex + convertPos(move.getFirstX(), move.getFirstY()); // Add the movement vector to original index.
-		int playerIndex = pitIndex + convertPos(move.getFinalX(), move.getFinalY()); // Add the movement vector to last move's end position.
+		int playerIndex = lastIndex + convertPos(move.getX(), move.getY()); // Add the movement vector to last move's end position.
 		
-		nextGrid.setPlayer(false, moverIndex);
-		nextGrid.setBit(false, moverIndex);
-		nextGrid.setBit(true, pitIndex);
-		nextGrid.setBit(true, playerIndex);
 		nextGrid.setPlayer(true, playerIndex);
+		nextGrid.setPlayer(false, lastIndex);
+		
+		nextGrid.setBit(true, playerIndex);
+		if(dropPit)
+			nextGrid.setBit(true, lastIndex);
 		
 		System.out.println(nextGrid);
 		return nextGrid;
 	}
 	
+	// Returns true if a move would be illegal (player moving to player).
+	// These moves are impossible to make and thus never evaluated.
+	public boolean isLegal(MoveTuple move, int moverIndex) {
+		int index = moverIndex + convertPos(move.getX(), move.getY());
+		return playerBits.get(index);
+	}
+	
+	// Returns true if a move would result in player death.
+	// Halts further search, causes a non-positive evaluation.
+	public boolean isDead(MoveTuple move, int moverIndex) {
+		int index = moverIndex + convertPos(move.getX(), move.getY());
+		return gridBits.get(index);
+	}
+	
 	// Compares the gridBits and playerBits with a newly generated positional BitSet.
-	// -1 if move is illegal (player-to-player), 0 if move is loss (into pit), 1 if move is survivable.
+	/* -1 if move is illegal (player-to-player), 0 if move is loss (into pit), 1 if move is survivable.
 	public int evalResult(MoveTuple move, int moverIndex) {
 		BitSet moveBits = new BitSet(dimensions * dimensions);
 		int firstIndex = moverIndex + convertPos(move.getFirstX(), move.getFirstY());
@@ -73,6 +88,7 @@ public class BitGrid {
 		
 		return eval;
 	}
+	*/
 	
 	public int getDimensions() {
 		return dimensions;

@@ -2,8 +2,7 @@ package elements;
 import utilities.SpriteList;
 
 public abstract class Entity {
-    private int x;
-    private int y;
+    private int x, y;
     private SpriteList spriteIndex;
     private int imageIndex;
 
