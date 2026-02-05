@@ -3,11 +3,12 @@ package bots;
 // Easier to read and more type safe than int[]
 // TODO: Go back through the Grid move generation and design to accomodate.
 public class MoveTuple {
-	private int x, y;
+	private int x, y, eval;
 	
 	private MoveTuple(int x, int y) {
 		this.x = x;
 		this.y = y;
+		eval = 0;
 	}
 	
 	// Returns a movement vector based on given integer.
@@ -28,8 +29,10 @@ public class MoveTuple {
 				return new MoveTuple(-1, 1);
 			case 6:
 				return new MoveTuple(-1, 0);
-			default:
+			case 7:
 				return new MoveTuple(-1, -1);
+			default:
+				return new MoveTuple(0, 0); // The "blank"/invalid move.
 		}
 	}
 	
@@ -44,6 +47,14 @@ public class MoveTuple {
 	public int[] getVector() {
 		int[] newInt = {x, y};
 		return newInt;
+	}
+	
+	public int getEval() {
+		return eval;
+	}
+	
+	public void setEval(int eval) {
+		this.eval = eval;
 	}
 	
 	public String toString() {

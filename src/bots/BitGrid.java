@@ -56,10 +56,14 @@ public class BitGrid {
 	// Returns true if a move would be illegal (player moving to player).
 	// These moves are impossible to make and thus never evaluated.
 	public boolean isLegal(MoveTuple move, int moverIndex) {
+		int trueX = (moverIndex % dimensions) + move.getX();
+		int trueY = (moverIndex / dimensions) + move.getY();
 		int index = moverIndex + convertPos(move.getX(), move.getY());
-		if(index < 0 || index > length()) // Check if its within bounds.
+		
+		if(trueX < 0 || trueX >= dimensions || trueY < 0 || trueY >= dimensions) // Check if its within bounds.
 			return false;
 		
+		System.out.println(playerBits);
 		return !(playerBits.get(index));
 	}
 	

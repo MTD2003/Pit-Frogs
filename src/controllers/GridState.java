@@ -27,7 +27,7 @@ public class GridState implements State {
     private static int sizePlanter = GridConsts.MIN_SIZE + 1;
 	private static int timePlanter = GridConsts.MAX_TIMER / 2;
 	// Indicates the number, difficulty, and position of artificial agents.
-	private static int botFlag[] = { GridConsts.HUMAN, GridConsts.NAIVE_BOT, GridConsts.HUMAN, GridConsts.HUMAN };
+	private static int botFlag[] = { GridConsts.NAIVE_BOT, GridConsts.NAIVE_BOT, GridConsts.NAIVE_BOT, GridConsts.NAIVE_BOT };
 	
 	private final int maxTime;
 	private int timer, index, turn, movesLeft;
@@ -53,7 +53,7 @@ public class GridState implements State {
 		timer = 0;
 		turn = 1;
 		
-		bot = new NaiveAgent(2);
+		bot = new NaiveAgent(8);
 		
 		loadText();
 	}
@@ -74,10 +74,10 @@ public class GridState implements State {
     				
     				bot.setPosition(gridObj.getBitGrid());
     				bot.startSearch(pX, pY);
-    			} else if(timer > Game.UPS) { // Adds a delay before applying moves.
+    			} else if(timer > 30) { // Adds a delay before applying moves.
     				MoveTuple move = bot.popMove();
     				
-    				if(move == null) {
+    				if(move.getEval() <= -1) {
     					gridObj.forceKill(index);
     					turnReset();
     					return;
