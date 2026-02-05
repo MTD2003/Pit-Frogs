@@ -15,21 +15,21 @@ public class MoveTuple {
 	public static MoveTuple genMove(int dir) {
 		switch(dir) {
 			case 0:
-				return new MoveTuple(0, 1); // North
+				return new MoveTuple(0, -1); // North
 			case 1:
-				return new MoveTuple(1, 1); // North-west
+				return new MoveTuple(1, -1); // North-west
 			case 2:
 				return new MoveTuple(1, 0); // West, etc...
 			case 3:
-				return new MoveTuple(1, -1);
+				return new MoveTuple(1, 1);
 			case 4:
-				return new MoveTuple(0, -1);
+				return new MoveTuple(0, 1);
 			case 5:
-				return new MoveTuple(-1, -1);
+				return new MoveTuple(-1, 1);
 			case 6:
 				return new MoveTuple(-1, 0);
 			default:
-				return new MoveTuple(-1, 1);
+				return new MoveTuple(-1, -1);
 		}
 	}
 	

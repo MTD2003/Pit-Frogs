@@ -7,7 +7,8 @@ package bots;
 public class NaiveAgent {
 	private BitGrid position;
 	private MoveTuple bestMove, nextMove;
-	private final int maxDepth; // Not a bad idea to change into nodes...
+	private int bestEval;
+	private int maxDepth; // Not a bad idea to change into nodes...
 	// private boolean searching; // Maybe will used this for multithreading later...
 	
 	public NaiveAgent(int maxDepth) {
@@ -16,19 +17,17 @@ public class NaiveAgent {
 	
 	public void startSearch(int x, int y) {
 		int index = position.convertPos(x, y);
+		
+		bestEval = -1;
 		search(position, index, 0);
 	}
 	
 	private int search(BitGrid sPosition, int index, int depth) {
-		int bestEval = -1;
-		
 		// depth % 2 = 0 -> orthogonal
-		for(int i = depth % 2; i < 7; i += 2) {
+		for(int i = depth % 2; i <= 7; i += 2) {
 			int sEval = 0;
 			MoveTuple move = MoveTuple.genMove(i);
 			
-			// System.out.println(depth);
-			// System.out.println("[" + move.getX() + ", " + move.getY() + "]");
 			if(!sPosition.isLegal(move, index)) // Don't evaluate illegal moves.
 				continue;
 			
@@ -48,8 +47,8 @@ public class NaiveAgent {
 			
 			if(sEval > bestEval) {
 				bestEval = sEval;
+				System.out.println("DEPTH: " + depth + " BEST: " + bestEval);
 				setMove(move);
-				// System.out.println(bestEval);
 			}
 		}
 		
@@ -59,7 +58,6 @@ public class NaiveAgent {
 	public MoveTuple popMove() {
 		MoveTuple oldMove = bestMove;
 		bestMove = nextMove;
-		//nextMove = null; (?)
 		return oldMove;
 	}
 	

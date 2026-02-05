@@ -8,20 +8,25 @@ public class BitGrid {
 	
 	public BitGrid(int dimensions) {
 		this.dimensions = dimensions;
-		gridBits = new BitSet(dimensions * dimensions);
-		playerBits  = new BitSet(dimensions * dimensions);
+		gridBits = new BitSet(length());
+		playerBits  = new BitSet(length());
 	}
 	
+	/* Haven't found a use for this one yet.
 	public BitGrid(int dimensions, BitSet gridBits) {
 		this.dimensions = dimensions;
 		this.gridBits = gridBits;
-		playerBits  = new BitSet(dimensions * dimensions);
+		playerBits  = new BitSet(length());
 	}
+	*/
 	
 	public BitGrid(BitGrid bitGrid) {
 		this.dimensions = bitGrid.getDimensions();
-		gridBits = bitGrid.getBits();
-		playerBits = bitGrid.getPlayers();
+		gridBits = new BitSet(length()); 
+		playerBits = new BitSet(length());
+		
+		gridBits.or(bitGrid.getBits()); // Creates a deep clone of the BitSets.
+		playerBits.or(bitGrid.getPlayers());
 	}
 	
 	public int convertPos(int x, int y) {
@@ -35,7 +40,6 @@ public class BitGrid {
 	*/
 	
 	// Returns a new grid after applying a MoveTuple.
-	// TODO: Redo this to make sense with movement generation.
 	public BitGrid doMove(MoveTuple move, int lastIndex, boolean dropPit) {
 		BitGrid nextGrid = new BitGrid(this);
 		int playerIndex = lastIndex + convertPos(move.getX(), move.getY()); // Add the movement vector to last move's end position.
@@ -43,7 +47,6 @@ public class BitGrid {
 		nextGrid.setPlayer(true, playerIndex);
 		nextGrid.setPlayer(false, lastIndex);
 		
-		nextGrid.setBit(true, playerIndex);
 		if(dropPit)
 			nextGrid.setBit(true, lastIndex);
 		
@@ -113,23 +116,16 @@ public class BitGrid {
 	}
 	
 	public void setBit(boolean value, int index) {
-		if(value) {
-			gridBits.set(index);
-		} else {
-			gridBits.clear(index);
-		}
+		gridBits.set(index, value);
 	}
 	
 	public void setPlayer(boolean value, int x, int y) {
 		setPlayer(value, convertPos(x, y));
 	}
 	
-	public void setPlayer(boolean value,  int index) {
-		if(value) {
-			playerBits.set(index);
-		} else {
-			playerBits.clear();
-		}
+	public void setPlayer(boolean value, int index) {
+		playerBits.set(index, value);
+		// System.out.println(index + ": " + playerBits.get(index));
 	}
 	
 	public String toString() {

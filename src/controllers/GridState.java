@@ -27,7 +27,7 @@ public class GridState implements State {
     private static int sizePlanter = GridConsts.MIN_SIZE + 1;
 	private static int timePlanter = GridConsts.MAX_TIMER / 2;
 	// Indicates the number, difficulty, and position of artificial agents.
-	private static int botFlag[] = { GridConsts.NAIVE_BOT, GridConsts.NAIVE_BOT, GridConsts.HUMAN, GridConsts.HUMAN };
+	private static int botFlag[] = { GridConsts.HUMAN, GridConsts.NAIVE_BOT, GridConsts.HUMAN, GridConsts.HUMAN };
 	
 	private final int maxTime;
 	private int timer, index, turn, movesLeft;
