@@ -10,8 +10,7 @@ public class NaiveAgent {
 	public NaiveAgent(int maxDepth) {
 		this.maxDepth = maxDepth;
 		moveQueue = new MoveTuple[maxDepth + 1];
-		for(int i = 0; i < moveQueue.length; i++)
-			moveQueue[i] = MoveTuple.genMove(-1);
+		clearQueue();
 	}
 	
 	public void startSearch(int x, int y) {
@@ -28,7 +27,7 @@ public class NaiveAgent {
 			if(!sPosition.isLegal(move, index)) // Don't evaluate illegal moves.
 				continue;
 			
-			curEval = 0;
+			curEval = 1;
 			if(!sPosition.isDead(move, index)) {
 				if(depth < maxDepth) {
 					int nextIndex = index + sPosition.convertPos(move.getX(), move.getY());
@@ -36,10 +35,10 @@ public class NaiveAgent {
 					BitGrid nextPosition = sPosition.doMove(move, index, dropPit);
 					// System.out.println(nextPosition);
 					// System.out.println(nextPosition);
-					curEval = 1 + search(nextPosition, nextIndex, (depth + 1));
+					curEval = 2 + search(nextPosition, nextIndex, (depth + 1));
 				
 				} else {
-					curEval = 1; // When maxDepth is reached, we "peak" forward and assign a 1 eval to safe moves.
+					curEval = 2; // When maxDepth is reached, we "peak" forward and assign a 1 eval to safe moves.
 				}
 			}
 			
@@ -63,6 +62,12 @@ public class NaiveAgent {
 		
 		//System.out.println(oldMove);
 		return oldMove;
+	}
+	
+	// Clears the moveQueue following a round.
+	public void clearQueue() {
+		for(int i = 0; i < moveQueue.length; i++)
+			moveQueue[i] = MoveTuple.genMove(-1);
 	}
 	
 	public void setPosition(BitGrid position) {

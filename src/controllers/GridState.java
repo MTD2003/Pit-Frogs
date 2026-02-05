@@ -90,6 +90,7 @@ public class GridState implements State {
     			}
     		} else {
     			turnReset();
+    			bot.clearQueue(); // This will be conditional in the future.
     		}
     	
     	} else if(gridObj.getMovesNum() == 0) {

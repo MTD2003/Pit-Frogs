@@ -44,7 +44,8 @@ public class BitGrid {
 		BitGrid nextGrid = new BitGrid(this);
 		int playerIndex = lastIndex + convertPos(move.getX(), move.getY()); // Add the movement vector to last move's end position.
 		
-		nextGrid.setPlayer(true, playerIndex);
+		if(!nextGrid.getBits().get(playerIndex));
+			nextGrid.setPlayer(true, playerIndex);
 		nextGrid.setPlayer(false, lastIndex);
 		
 		if(dropPit)
@@ -63,7 +64,7 @@ public class BitGrid {
 		if(trueX < 0 || trueX >= dimensions || trueY < 0 || trueY >= dimensions) // Check if its within bounds.
 			return false;
 		
-		System.out.println(playerBits);
+		// System.out.println("Index: " + index + " vs. " + playerBits);
 		return !(playerBits.get(index));
 	}
 	

@@ -176,8 +176,11 @@ public class Grid {
     		}
     	}
     	
-		for(Player p : players)
-			myGrid.setPlayer(true, p.getX(), p.getY());
+		for(Player p : players) {
+			if(p.isActive())
+				myGrid.setPlayer(true, p.getX(), p.getY());
+		}
+			
     	
     	return myGrid;
     }
