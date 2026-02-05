@@ -45,4 +45,8 @@ public class MoveTuple {
 		int[] newInt = {x, y};
 		return newInt;
 	}
+	
+	public String toString() {
+		return (x + ", " + y);
+	}
 }

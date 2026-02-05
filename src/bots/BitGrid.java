@@ -47,7 +47,6 @@ public class BitGrid {
 		if(dropPit)
 			nextGrid.setBit(true, lastIndex);
 		
-		System.out.println(nextGrid);
 		return nextGrid;
 	}
 	
@@ -55,7 +54,10 @@ public class BitGrid {
 	// These moves are impossible to make and thus never evaluated.
 	public boolean isLegal(MoveTuple move, int moverIndex) {
 		int index = moverIndex + convertPos(move.getX(), move.getY());
-		return playerBits.get(index);
+		if(index < 0 || index > length()) // Check if its within bounds.
+			return false;
+		
+		return !(playerBits.get(index));
 	}
 	
 	// Returns true if a move would result in player death.
@@ -90,6 +92,10 @@ public class BitGrid {
 	}
 	*/
 	
+	public int length() {
+		return dimensions * dimensions;
+	}
+	
 	public int getDimensions() {
 		return dimensions;
 	}
@@ -112,8 +118,6 @@ public class BitGrid {
 		} else {
 			gridBits.clear(index);
 		}
-		
-		System.out.println(index + ": " + gridBits.get(index));
 	}
 	
 	public void setPlayer(boolean value, int x, int y) {
@@ -128,8 +132,17 @@ public class BitGrid {
 		}
 	}
 	
-	
 	public String toString() {
-		return gridBits.toString();
+		String myGridBits = "";
+		for(int i = 0; i < length(); i++) {
+			if(i % dimensions == 0)
+				myGridBits += "\n";
+			if(gridBits.get(i)) {
+				myGridBits += "X ";
+			} else {
+				myGridBits += "_ ";
+			}
+		}
+		return myGridBits;
 	}
 }

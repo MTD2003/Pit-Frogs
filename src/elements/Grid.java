@@ -59,6 +59,12 @@ public class Grid {
         playerID = new Identifier(players[0], 0, 0);
     }
     
+    public void playerMoveRaw(int index, int xVector, int yVector) {
+    	int newX = players[index].getX() + xVector;
+    	int newY = players[index].getY() + yVector;
+    	playerMove(index, newX, newY);
+    }
+    
     public void playerMove(int index, int newX, int newY) {
     	int lastX = players[index].getX();
     	int lastY = players[index].getY();
@@ -127,11 +133,11 @@ public class Grid {
     	}
     	
     	if(moves.isEmpty()) {
+    		forceKill(index);
     		players[index].kill();
     		spaces[pos[GridConsts.X]][pos[GridConsts.Y]] = new Pit(pos[GridConsts.X], pos[GridConsts.Y]);
     	} else {
-    		playerID.setPlayer(players[index]);
-        	playerID.update();
+    		forceID(index);
     	}
     }
     
@@ -221,5 +227,18 @@ public class Grid {
     
     public int getSize() {
     	return size;
+    }
+    
+    // Forces the identifier to a specific position, used for Player AI.
+    public void forceID(int index) {
+    	playerID.setPlayer(players[index]);
+    	playerID.update();
+    }
+    
+    public void forceKill(int index) {
+    	int pX = players[index].getX();
+    	int pY = players[index].getY();
+    	players[index].kill();
+		spaces[pX][pY] = new Pit(pX, pY);
     }
 }

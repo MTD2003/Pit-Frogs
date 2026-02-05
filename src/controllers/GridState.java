@@ -1,6 +1,7 @@
 package controllers;
 
 import bots.MoveTuple;
+import bots.NaiveAgent;
 import elements.Entity;
 import elements.Grid;
 import elements.Selection;
@@ -25,10 +26,14 @@ public class GridState implements State {
 	private static int playerPlanter = GridConsts.MIN_PLAYERS;
     private static int sizePlanter = GridConsts.MIN_SIZE + 1;
 	private static int timePlanter = GridConsts.MAX_TIMER / 2;
+	// Indicates the number, difficulty, and position of artificial agents.
+	private static int botFlag[] = { GridConsts.NAIVE_BOT, GridConsts.NAIVE_BOT, GridConsts.HUMAN, GridConsts.HUMAN };
 	
 	private final int maxTime;
 	private int timer, index, turn, movesLeft;
 	private int gridScale, lastScale;
+	private NaiveAgent bot; // Will change this up a little later.
+	private boolean bSearched;
 	
 	// Outside objects may only construct an object with planter parameters.
 	public GridState(Game gameObj) {
@@ -48,6 +53,8 @@ public class GridState implements State {
 		timer = 0;
 		turn = 1;
 		
+		bot = new NaiveAgent(2);
+		
 		loadText();
 	}
 
@@ -58,22 +65,41 @@ public class GridState implements State {
     	if((!gridObj.getPlayerStatusAt(index)))
     		movesLeft = 0;
     	
-    	if(gridObj.getMovesNum() == 0) {
+    	if(botFlag[index] != GridConsts.HUMAN) {
+    		if(movesLeft > 0 && gridObj.getPlayerStatusAt(index)) {
+    			if(!bSearched) { // If search has not been completed.
+    				int pX = gridObj.getPlayerAt(index).getX();
+    				int pY = gridObj.getPlayerAt(index).getY();
+    				bSearched = true;
+    				
+    				bot.setPosition(gridObj.getBitGrid());
+    				bot.startSearch(pX, pY);
+    			} else if(timer > Game.UPS) { // Adds a delay before applying moves.
+    				MoveTuple move = bot.popMove();
+    				
+    				if(move == null) {
+    					gridObj.forceKill(index);
+    					turnReset();
+    					return;
+    				}
+    				
+    				gridObj.playerMoveRaw(index, move.getX(), move.getY());
+    				gridObj.forceID(index);
+    				movesLeft--;
+    				timer = 0;
+    			}
+    		} else {
+    			turnReset();
+    		}
+    	
+    	} else if(gridObj.getMovesNum() == 0) {
     		if(movesLeft > 0 && gridObj.getPlayerStatusAt(index)) {
 	    		gridObj.generateMoves(index, movesLeft % 2);
 	    		generateHitboxes();
 	    		timer = 0;
 	    		movesLeft--;
-    	
     		} else {
-    			tutorial.setText("<Avoid the Pitfalls>");
-	    		index = gridObj.getNextAlive(index);
-	    		movesLeft = 2;
-	    		turn++;
-	    		
-	    		// MoveTuple move = new MoveTuple(1, 0, 1, 1);
-	    		// gridObj.getBitGrid().evalResult(move, 0);
-	    		tryWinCondition();
+    			turnReset();
     		}
     	}
     	
@@ -203,6 +229,21 @@ public class GridState implements State {
     	}
     }
     
+    // Resets necessary conditions at the end of a player turn.
+    private void turnReset() {
+    	tutorial.setText("<Avoid the Pitfalls>"); // Maybe turn into a random tip at some point.
+		index = gridObj.getNextAlive(index);
+		movesLeft = 2;
+		turn++;
+		
+		tryWinCondition();
+		
+		if(botFlag[index] != GridConsts.HUMAN) {
+			bSearched = false;
+			gridObj.forceID(index);
+		}
+    }
+    
 	private void tryWinCondition() {
     	if(index == gridObj.getNextAlive(index)) {
     		WinState winscreen = new WinState(gameObj, gridObj, gridScale, index);
@@ -237,7 +278,12 @@ public class GridState implements State {
 	}
 	
 	public static void setTimeP(int tp) {
-		System.out.println(tp);
 		timePlanter = checkMinMax(tp, GridConsts.MIN_TIMER, GridConsts.MAX_TIMER);
+	}
+	
+	public static void setBotFlag(int type, int target) {
+		target = Math.min(3, Math.max(0, target));
+		type = Math.min(GridConsts.SMART_BOT, Math.max(0, type));
+		botFlag[target] = type;
 	}
 }
