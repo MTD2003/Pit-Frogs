@@ -1,16 +1,16 @@
 package menu;
 
-import controllers.MenuState;
+import controllers.StartState;
 import elements.Entity;
 import utilities.SpriteList;
 import view.Interactable;
 
 public class ChangeButton extends Entity implements Interactable {
-	private final MenuState parent;
+	private final StartState parent;
 	private final int index;
 	private final int modifier;
 	
-	public ChangeButton(MenuState parent, int x, int y, int index, int modifier) {
+	public ChangeButton(StartState parent, int x, int y, int index, int modifier) {
 		super(x, y);
 		
 		this.parent = parent;

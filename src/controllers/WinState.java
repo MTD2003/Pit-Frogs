@@ -49,7 +49,7 @@ public class WinState implements State {
 		int lastKey = inputs.getKey();
 		
 		if(lastKey == KeyEvent.VK_ESCAPE) {
-			MenuState menuscreen = new MenuState(gameObj);
+			StartState menuscreen = new StartState(gameObj);
 			gameObj.swapState(menuscreen);
 		}
 		

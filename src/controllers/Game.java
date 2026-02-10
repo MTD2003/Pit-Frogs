@@ -24,7 +24,7 @@ public class Game implements Runnable {
     public Game() {
         window = new GameView();
         panel = new GamePanel();
-        stateNow = new MenuState(this);
+        stateNow = new StartState(this);
         
         window.addComponent(panel);
         loadSprites();

@@ -74,7 +74,7 @@ public class GridState implements State {
     				
     				bot.setPosition(gridObj.getBitGrid());
     				bot.startSearch(pX, pY);
-    			} else if(timer > 30) { // Adds a delay before applying moves.
+    			} else if(timer > 60) { // Adds a delay before applying moves.
     				MoveTuple move = bot.popMove();
     				
     				if(move.getEval() <= -1) {

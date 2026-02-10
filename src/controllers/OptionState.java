@@ -1,7 +1,19 @@
 package controllers;
 
-public class OptionState extends MenuState {
+import java.awt.Graphics;
+// Extends MenuState...
+public class OptionState implements State {
 	public OptionState(Game gameObj) {
-		super(gameObj);
+		
+	}
+
+	@Override
+	public void step() {
+		
+	}
+
+	@Override
+	public void draw(Graphics g) {
+		
 	}
 }
