@@ -27,6 +27,14 @@ public abstract class Entity {
     public int getFrame() {
         return imageIndex;
     }
+    
+    public int getWidth() {
+    	return spriteIndex.width();
+	}
+	
+	public int getHeight() {
+		return spriteIndex.height();
+	}
 
     public void setX(int x) {
         this.x = x;

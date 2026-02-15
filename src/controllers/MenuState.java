@@ -1,5 +1,5 @@
 package controllers;
-import menu.ChangeButton;
+import menu.MenuButton;
 import menu.MenuText;
 import utilities.InputMirror;
 import view.InteractBox;
@@ -9,9 +9,9 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 // Generic MenuState that StartState and OptionState build on.
-public abstract class MenuState {
+public abstract class MenuState implements State {
 	private Game gameObj;
-	private ArrayList<ChangeButton> buttons; // Change into generic button.
+	private ArrayList<MenuButton> buttons;
 	private ArrayList<InteractBox> hitboxes;
 	private ArrayList<MenuText> menuLabels;
 	
@@ -21,10 +21,12 @@ public abstract class MenuState {
 	
 	public MenuState(Game gameObj) {
 		this.gameObj = gameObj;
-		// scale = ???
-		buttons = new ArrayList<ChangeButton>();
+		
+		buttons = new ArrayList<MenuButton>();
 		hitboxes = new ArrayList<InteractBox>();
 		menuLabels = new ArrayList<MenuText>();
+		
+		scale = 1; // Setting this for safety.
 	}
 	
 	public void step() {
@@ -33,9 +35,11 @@ public abstract class MenuState {
 	
 	public void draw(Graphics g) {
 		// updateText(); // Find another way to do necessary updates?
-		for(ChangeButton btn : buttons) {
+		for(MenuButton btn : buttons) {
 			BufferedImage sprite = gameObj.getSprite(btn.getSprite(), btn.getFrame());
-			g.drawImage(sprite, btn.getX(), btn.getY(), scale, scale, null);
+			int width = btn.getWidth() * scale;
+			int height = btn.getHeight() * scale;
+			g.drawImage(sprite, btn.getX(), btn.getY(), width, height, null);
 		}
 		
 		for(MenuText text : menuLabels)
@@ -89,19 +93,36 @@ public abstract class MenuState {
 		}
 	}
 	
+	// Don't know if I'll use this function
 	public void clearScreen() {
 		buttons.clear();
 		hitboxes.clear();
 		menuLabels.clear();
 	}
 	
-	public void addButton(ChangeButton btn) {
+	public void addButton(MenuButton btn) {
 		buttons.add(btn);
+		loadHitbox(btn);
 		// updateHitboxes();
 	}
 	
 	public void addText(MenuText txt) {
 		menuLabels.add(txt);
+	}
+	
+	public void updateText(int index, int newText) {
+		menuLabels.get(index).setText(newText);
+	}
+	
+	public void updateText(int index, String newText) {
+		menuLabels.get(index).setText(newText);
+	}
+	
+	public void loadHitbox(MenuButton btn) {
+		int width = btn.getWidth() * scale;
+		int height = btn.getHeight() * scale;
+		InteractBox ib = new InteractBox(btn, btn.getX(), btn.getY(), width, height);
+		hitboxes.add(ib);
 	}
 	
 	public Game getGame() {

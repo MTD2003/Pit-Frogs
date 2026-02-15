@@ -1,19 +1,14 @@
 package menu;
 
 import controllers.StartState;
-import elements.Entity;
 import utilities.SpriteList;
-import view.Interactable;
 
-public class ChangeButton extends Entity implements Interactable {
-	private final StartState parent;
+public class ChangeButton extends MenuButton {
 	private final int index;
 	private final int modifier;
 	
 	public ChangeButton(StartState parent, int x, int y, int index, int modifier) {
-		super(x, y);
-		
-		this.parent = parent;
+		super(parent, x, y);
 		this.index = index;
 		this.modifier = modifier;
 		
@@ -27,19 +22,7 @@ public class ChangeButton extends Entity implements Interactable {
 			setSprite(SpriteList.SPR_DOWN_ARROW);
 	}
 
-	public void onNothing() {
-		setFrame(0);
-	}
-
-	public void onHover() {
-		setFrame(1);
-	}
-
-	public void onPress() {
-		setFrame(2);
-	}
-
 	public void onActivate() {
-		parent.changePlanters(index, modifier);
+		System.out.println("CHECK");
 	}
 }
