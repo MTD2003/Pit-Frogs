@@ -34,8 +34,11 @@ public class StartState extends MenuState {
 		*/
 	}
 	
-	// TODO: Change(???) or put in another class.
-	public void changePlanters(int index, int modifier) {
-		// Nothing for now.
+	public void updateText() {
+		// Nothing to update.
+	}
+	
+	public void updateSprites() {
+		// Also nothing to update.
 	}
 }

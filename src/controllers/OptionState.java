@@ -1,7 +1,6 @@
 package controllers;
 
 //import controllers.MenuState.StateIndex;
-import controllers.GridState;
 import elements.Entity;
 import menu.ChangeButton;
 import menu.MenuText;
@@ -80,15 +79,22 @@ public class OptionState extends MenuState {
 			yOffset = (posScale / -2);
 			
 			addSprite(key, new Entity(SpriteList.playerSpriteAtIndex(i), x + xOffset, y + yOffset));
-			
 			yOffset += posScale;
-			curButton = new ChangeButton(this, x + xOffset, y + yOffset, i, 1);
+			curButton = new ChangeButton(this, x + xOffset, y + yOffset, i, 1) {
+				public void specialAction() {
+					GridState.cycleBotFlag(getIndex(), getModifier());
+				}
+			};
 			curButton.setSprite(SpriteList.SPR_SIDE_ARROW);
 			curButton.setScaleX(-1);
 			addButton(curButton);
 			
 			xOffset += posScale;
-			curButton = new ChangeButton(this, x + xOffset, y + yOffset, i, 2);
+			curButton = new ChangeButton(this, x + xOffset, y + yOffset, i, 2) {
+				public void specialAction() {
+					GridState.cycleBotFlag(getIndex(), getModifier());
+				}
+			};
 			curButton.setSprite(SpriteList.SPR_SIDE_ARROW);
 			addButton(curButton);
 			
@@ -102,32 +108,40 @@ public class OptionState extends MenuState {
 			yOffset = (posScale * 2) * (j % 2);
 			
 			modifier = 1 - 2 * (j % 2);
-			//if(i >= TIMER)
-				//modifier *= 3;
+			if(j >= 4) // Timer modifiers.
+				modifier *= 3;
 			
-			addButton(new ChangeButton(this, x + xOffset, y + yOffset, j, modifier));
+			curButton = new ChangeButton(this, x + xOffset, y + yOffset, j / 2, modifier) {
+				public void specialAction() {
+					GridState.cyclePlanters(getIndex(), getModifier());
+				}
+			};
+			addButton(curButton);
 		}
 		
-		updatePlayerSprites();
+		updateSprites();
 	}
 
-	private void updateText() {
-		/*
+	public void updateText() {
 		int settingP = GridState.getPlayerP();
 		int settingS = GridState.getSizeP();
 		int settingT = GridState.getTimeP();
 		
+		String sizeText = settingS + "x" + settingS;
 		String timerText = String.format("%02d", settingT);
-		String settingText = settingS + "x" + settingS;
 		
-		updateText(PLAYERS, settingP);
-		updateText(SPACES, settingText);
-		updateText(TIMER, timerText);
-		*/
+		updateTextAt("PLAY_PLANT", settingP);
+		updateTextAt("GRID_PLANT", sizeText);
+		updateTextAt("TIME_PLANT", timerText);
+		
+		for(int i = 0; i < GridConsts.MAX_PLAYERS; i++) {
+			String newText = levelName(GridState.getBotFlag(i));
+			updateTextAt("AI_" + i, newText);
+		}
 	}
 	
 	// Updates all Player Sprites
-	private void updatePlayerSprites() {
+	public void updateSprites() {
 		for(int i = 0; i < GridConsts.MAX_PLAYERS; i++) {
 			if(GridState.getPlayerP() <= i)
 				updateSpriteAt(i, -1);
@@ -140,23 +154,14 @@ public class OptionState extends MenuState {
 		updateSpriteAt("PLAYER_" + index, SpriteList.playerSpriteAtIndex(playerID));
 	}
 	
-	public void changePlanters() {
-		/*
-		int origVal;
-		switch(index) {
-			case PLAYERS:
-				origVal = GridState.getPlayerP();
-				GridState.setPlayerP(origVal + modifier);
-				break;
-			case SPACES:
-				origVal = GridState.getSizeP();
-				GridState.setSizeP(origVal + modifier);
-				break;
-			case TIMER:
-				origVal = GridState.getTimeP();
-				GridState.setTimeP(origVal + modifier);
-				break;
+	private String levelName(int level) {
+		switch(level) {
+			case GridConsts.NAIVE_BOT:
+				return "Naive";
+			case GridConsts.SMART_BOT:
+				return "Smart";
+			default:
+				return "Human";
 		}
-		*/
 	}
 }

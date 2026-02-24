@@ -161,4 +161,8 @@ public abstract class MenuState implements State {
 	public void setScale(int scale) {
 		this.scale = scale;
 	}
+	
+	public abstract void updateText();
+	
+	public abstract void updateSprites();
 }

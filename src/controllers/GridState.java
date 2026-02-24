@@ -23,11 +23,13 @@ public class GridState implements State {
 	private MenuText countTurn, countPlayer, countTime;
 	private MenuText tutorial;
 	
-	private static int playerPlanter = GridConsts.MAX_PLAYERS;
+	private static int playerPlanter = GridConsts.MIN_PLAYERS;
     private static int sizePlanter = GridConsts.MIN_SIZE + 1;
 	private static int timePlanter = GridConsts.MAX_TIMER / 2;
+	private static final int P_PLANTER = 0, S_PLANTER = 1, T_PLANTER = 2;
 	// Indicates the number, difficulty, and position of artificial agents.
 	private static int botFlag[] = { GridConsts.NAIVE_BOT, GridConsts.NAIVE_BOT, GridConsts.NAIVE_BOT, GridConsts.NAIVE_BOT };
+	
 	
 	private final int maxTime;
 	private int timer, index, turn, movesLeft;
@@ -258,6 +260,30 @@ public class GridState implements State {
 		return Math.min(maxVal, Math.max(value, minVal));
 	}
 	
+	public static void cycleBotFlag(int target, int modifier) {
+		target = target % botFlag.length;
+		botFlag[target] = (botFlag[target] + modifier) % 3;
+		System.out.println(botFlag[target]);
+	}
+	
+	public static void cyclePlanters(int planter, int modifier) {
+		int newValue;
+		switch(planter) {
+			case P_PLANTER:
+				newValue = playerPlanter + modifier;
+				setPlayerP(newValue);
+				break;
+			case S_PLANTER:
+				newValue = sizePlanter + modifier;
+				setSizeP(newValue);
+				break;
+			case T_PLANTER:
+				newValue = timePlanter + modifier;
+				setTimeP(newValue);
+				break;
+		}
+	}
+	
 	public static int getPlayerP() {
 		return playerPlanter;
 	}
@@ -270,6 +296,10 @@ public class GridState implements State {
 		return timePlanter;
 	}
 	
+	public static int getBotFlag(int target) {
+		return botFlag[target];
+	}
+	
 	public static void setPlayerP(int pp) {
 		playerPlanter = checkMinMax(pp, GridConsts.MIN_PLAYERS, GridConsts.MAX_PLAYERS);
 	}
@@ -280,11 +310,5 @@ public class GridState implements State {
 	
 	public static void setTimeP(int tp) {
 		timePlanter = checkMinMax(tp, GridConsts.MIN_TIMER, GridConsts.MAX_TIMER);
-	}
-	
-	public static void setBotFlag(int type, int target) {
-		target = Math.min(3, Math.max(0, target));
-		type = Math.min(GridConsts.SMART_BOT, Math.max(0, type));
-		botFlag[target] = type;
 	}
 }

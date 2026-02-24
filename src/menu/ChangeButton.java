@@ -23,6 +23,21 @@ public class ChangeButton extends MenuButton {
 	}
 
 	public void onActivate() {
-		System.out.println(index);
+		specialAction();
+		getParent().updateSprites();
+		getParent().updateText();
+	}
+	
+	// Performs a specialAction that is anonymously defined on setup.
+	public void specialAction() {
+		System.out.println("DEBUG: " + modifier);
+	}
+	
+	public int getIndex() {
+		return index;
+	}
+	
+	public int getModifier() {
+		return modifier;
 	}
 }
