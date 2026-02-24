@@ -19,6 +19,20 @@ public class InteractBox {
 		this.y = y;
 		this.width = width;
 		this.height = height;
+		verifyDimensions();
+	}
+	
+	// Accomodates for negative image scaling.
+	private void verifyDimensions() {
+		if(width < 0) {
+			x += width;
+			width *= -1;
+		}
+		
+		if(height < 0) {
+			y += height;
+			height *= -1;
+		}
 	}
 	
 	private boolean boundsCheck(int clickX, int clickY) {

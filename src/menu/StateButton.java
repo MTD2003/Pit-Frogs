@@ -12,7 +12,21 @@ public class StateButton extends MenuButton {
 		super(parent, x, y);
 		this.nextState = nextState;
 		
-		setSprite(SpriteList.SPR_START_BUTTON);
+		spriteCheck();
+	}
+	
+	private void spriteCheck() {
+		switch(nextState) {
+			case MENU:
+				setSprite(SpriteList.SPR_MENU_BUTTON);
+				break;
+			case OPTIONS:
+				setSprite(SpriteList.SPR_OPTION_BUTTON);
+				break;
+			case GRID:
+				setSprite(SpriteList.SPR_START_BUTTON);
+				break;
+		}
 	}
 	
 	public void onActivate() {

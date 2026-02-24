@@ -1,13 +1,13 @@
 package menu;
 
-import controllers.StartState;
+import controllers.MenuState;
 import utilities.SpriteList;
 
 public class ChangeButton extends MenuButton {
 	private final int index;
 	private final int modifier;
 	
-	public ChangeButton(StartState parent, int x, int y, int index, int modifier) {
+	public ChangeButton(MenuState parent, int x, int y, int index, int modifier) {
 		super(parent, x, y);
 		this.index = index;
 		this.modifier = modifier;
@@ -23,6 +23,6 @@ public class ChangeButton extends MenuButton {
 	}
 
 	public void onActivate() {
-		System.out.println("CHECK");
+		System.out.println(index);
 	}
 }

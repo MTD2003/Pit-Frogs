@@ -1,4 +1,5 @@
 package controllers;
+import elements.Entity;
 import menu.MenuButton;
 import menu.MenuText;
 import utilities.InputMirror;
@@ -14,10 +15,11 @@ public abstract class MenuState implements State {
 	private ArrayList<MenuButton> buttons;
 	private ArrayList<InteractBox> hitboxes;
 	private ArrayList<MenuText> menuLabels;
+	private ArrayList<Entity> specialSprites;
 	
 	private int scale;
 	
-	public enum StateIndex { START, OPTIONS, GRID }
+	public enum StateIndex { MENU, OPTIONS, GRID }
 	
 	public MenuState(Game gameObj) {
 		this.gameObj = gameObj;
@@ -25,6 +27,7 @@ public abstract class MenuState implements State {
 		buttons = new ArrayList<MenuButton>();
 		hitboxes = new ArrayList<InteractBox>();
 		menuLabels = new ArrayList<MenuText>();
+		specialSprites = new ArrayList<Entity>();
 		
 		scale = 1; // Setting this for safety.
 	}
@@ -34,12 +37,18 @@ public abstract class MenuState implements State {
 	}
 	
 	public void draw(Graphics g) {
-		// updateText(); // Find another way to do necessary updates?
 		for(MenuButton btn : buttons) {
 			BufferedImage sprite = gameObj.getSprite(btn.getSprite(), btn.getFrame());
-			int width = btn.getWidth() * scale;
-			int height = btn.getHeight() * scale;
+			int width = btn.getWidth() * scale * btn.getScaleX();
+			int height = btn.getHeight() * scale * btn.getScaleY();
 			g.drawImage(sprite, btn.getX(), btn.getY(), width, height, null);
+		}
+		
+		for(Entity e : specialSprites) {
+			BufferedImage sprite = gameObj.getSprite(e.getSprite(), e.getFrame());
+			int width = e.getWidth() * scale * e.getScaleX();
+			int height = e.getHeight() * scale * e.getScaleY();
+			g.drawImage(sprite, e.getX(), e.getY(), width, height, null);
 		}
 		
 		for(MenuText text : menuLabels)
@@ -78,7 +87,7 @@ public abstract class MenuState implements State {
 	public void requestState(StateIndex stateNum) {
 		State nextState;
 		switch(stateNum) {
-			case START:
+			case MENU:
 				nextState = new StartState(gameObj);
 				gameObj.swapState(nextState);
 				break;
@@ -100,6 +109,10 @@ public abstract class MenuState implements State {
 		menuLabels.clear();
 	}
 	
+	public void addSprite(Entity spr) {
+		specialSprites.add(spr);
+	}
+	
 	public void addButton(MenuButton btn) {
 		buttons.add(btn);
 		loadHitbox(btn);
@@ -110,17 +123,17 @@ public abstract class MenuState implements State {
 		menuLabels.add(txt);
 	}
 	
-	public void updateText(int index, int newText) {
+	public void updateTextAt(int index, int newText) {
 		menuLabels.get(index).setText(newText);
 	}
 	
-	public void updateText(int index, String newText) {
+	public void updateTextAt(int index, String newText) {
 		menuLabels.get(index).setText(newText);
 	}
 	
 	public void loadHitbox(MenuButton btn) {
-		int width = btn.getWidth() * scale;
-		int height = btn.getHeight() * scale;
+		int width = btn.getWidth() * scale * btn.getScaleX();
+		int height = btn.getHeight() * scale * btn.getScaleY();
 		InteractBox ib = new InteractBox(btn, btn.getX(), btn.getY(), width, height);
 		hitboxes.add(ib);
 	}

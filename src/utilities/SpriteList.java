@@ -10,9 +10,12 @@ public enum SpriteList {
     SPR_FROG2("/sprites/grid/Frog2.png", 3, 16, 16),
     SPR_FROG3("/sprites/grid/Frog3.png", 3, 16, 16),
     SPR_FROG4("/sprites/grid/Frog4.png", 3, 16, 16),
+    SPR_NO_PLAYER("/sprites/menu/NOPLAYER.png", 1, 16, 16),
     SPR_UP_ARROW("/sprites/menu/ArrowUp.png", 3, 16, 16),
     SPR_DOWN_ARROW("/sprites/menu/ArrowDown.png", 3, 16, 16),
-    SPR_SIDE_ARROW("/sprites/menu/ArrowSide.png", 3, 16, 16),
+    SPR_SIDE_ARROW("/sprites/menu/ArrowSide.png", 3, 10, 9),
+    SPR_MENU_BUTTON("/sprites/menu/MenuButton.png", 3, 48, 16),
+    SPR_OPTION_BUTTON("/sprites/menu/OptionButton.png", 3, 48, 16),
     SPR_START_BUTTON("/sprites/menu/StartButton.png", 3, 80, 16);
 	
 	public static final int SPRITE_DIMENSIONS = 16;
@@ -28,6 +31,21 @@ public enum SpriteList {
     
     public static int size() {
     	return values().length;
+    }
+    
+    public static SpriteList playerSpriteAtIndex(int index) {
+    	switch(index) {
+    		case 0:
+    			return SPR_FROG1;
+    		case 1:
+    			return SPR_FROG2;
+    		case 2:
+    			return SPR_FROG3;
+    		case 3:
+    			return SPR_FROG4;
+    		default:
+    			return SPR_NO_PLAYER;
+    	}
     }
 
     public int frames() {

@@ -23,7 +23,7 @@ public class GridState implements State {
 	private MenuText countTurn, countPlayer, countTime;
 	private MenuText tutorial;
 	
-	private static int playerPlanter = GridConsts.MIN_PLAYERS;
+	private static int playerPlanter = GridConsts.MAX_PLAYERS;
     private static int sizePlanter = GridConsts.MIN_SIZE + 1;
 	private static int timePlanter = GridConsts.MAX_TIMER / 2;
 	// Indicates the number, difficulty, and position of artificial agents.
