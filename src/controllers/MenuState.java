@@ -1,21 +1,25 @@
 package controllers;
+
 import elements.Entity;
 import menu.MenuButton;
 import menu.MenuText;
 import utilities.InputMirror;
+import utilities.SpriteList;
 import view.InteractBox;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 // Generic MenuState that StartState and OptionState build on.
 public abstract class MenuState implements State {
 	private Game gameObj;
+	private Map<String, MenuText> menuLabels;
+	private Map<String, Entity> specialSprites;
 	private ArrayList<MenuButton> buttons;
 	private ArrayList<InteractBox> hitboxes;
-	private ArrayList<MenuText> menuLabels;
-	private ArrayList<Entity> specialSprites;
 	
 	private int scale;
 	
@@ -24,10 +28,10 @@ public abstract class MenuState implements State {
 	public MenuState(Game gameObj) {
 		this.gameObj = gameObj;
 		
+		menuLabels = new HashMap<>();
+		specialSprites = new HashMap<>();
 		buttons = new ArrayList<MenuButton>();
 		hitboxes = new ArrayList<InteractBox>();
-		menuLabels = new ArrayList<MenuText>();
-		specialSprites = new ArrayList<Entity>();
 		
 		scale = 1; // Setting this for safety.
 	}
@@ -44,14 +48,14 @@ public abstract class MenuState implements State {
 			g.drawImage(sprite, btn.getX(), btn.getY(), width, height, null);
 		}
 		
-		for(Entity e : specialSprites) {
+		for(Entity e : specialSprites.values()) {
 			BufferedImage sprite = gameObj.getSprite(e.getSprite(), e.getFrame());
 			int width = e.getWidth() * scale * e.getScaleX();
 			int height = e.getHeight() * scale * e.getScaleY();
 			g.drawImage(sprite, e.getX(), e.getY(), width, height, null);
 		}
 		
-		for(MenuText text : menuLabels)
+		for(MenuText text : menuLabels.values())
 			text.selfDraw(g);
 	}
 	
@@ -109,26 +113,30 @@ public abstract class MenuState implements State {
 		menuLabels.clear();
 	}
 	
-	public void addSprite(Entity spr) {
-		specialSprites.add(spr);
-	}
-	
 	public void addButton(MenuButton btn) {
 		buttons.add(btn);
 		loadHitbox(btn);
 		// updateHitboxes();
 	}
 	
-	public void addText(MenuText txt) {
-		menuLabels.add(txt);
+	public void addText(String key, MenuText txt) {
+		menuLabels.put(key, txt);
 	}
 	
-	public void updateTextAt(int index, int newText) {
-		menuLabels.get(index).setText(newText);
+	public void addSprite(String key, Entity spr) {
+		specialSprites.put(key, spr);
 	}
 	
-	public void updateTextAt(int index, String newText) {
-		menuLabels.get(index).setText(newText);
+	public void updateTextAt(String key, int newText) {
+		menuLabels.get(key).setText(newText);
+	}
+	
+	public void updateTextAt(String key, String newText) {
+		menuLabels.get(key).setText(newText);
+	}
+	
+	public void updateSpriteAt(String key, SpriteList newSprite) {
+		specialSprites.get(key).setSprite(newSprite);
 	}
 	
 	public void loadHitbox(MenuButton btn) {

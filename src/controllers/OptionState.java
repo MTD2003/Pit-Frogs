@@ -1,6 +1,7 @@
 package controllers;
 
 //import controllers.MenuState.StateIndex;
+import controllers.GridState;
 import elements.Entity;
 import menu.ChangeButton;
 import menu.MenuText;
@@ -35,30 +36,32 @@ public class OptionState extends MenuState {
 		
 		yOffset = posScale * 2;
 		for(int i = 0; i < GridConsts.MAX_PLAYERS; i++) {
+			String key = "AI_" + i;
 			xOffset = (i * posScale * 3 - sFontSize - mFontSize);
-			addText(new MenuText("Human", x + xOffset, y + yOffset, sFontSize, fontBasic));
+			addText(key, new MenuText("Human", x + xOffset, y + yOffset, sFontSize, fontBasic));
 		}
 		
 		yOffset = (Game.SCREEN_HEIGHT / 4) + (posScale * 2);
 		xOffset = posScale;
-		addText(new MenuText("3", x + xOffset, y + yOffset, mFontSize, fontBasic));
+		addText("PLAY_PLANT", new MenuText("3", x + xOffset, y + yOffset, mFontSize, fontBasic));
 		xOffset += sFontSize * 8;
-		addText(new MenuText("6x6", x + xOffset, y + yOffset, mFontSize, fontBasic));
+		addText("GRID_PLANT", new MenuText("6x6", x + xOffset, y + yOffset, mFontSize, fontBasic));
 		xOffset += sFontSize * 8 + mFontSize;
-		addText(new MenuText("12", x + xOffset, y + yOffset, mFontSize, fontBasic));
+		addText("TIME_PLANT", new MenuText("12", x + xOffset, y + yOffset, mFontSize, fontBasic));
 		
 		yOffset += posScale * 2;
 		xOffset = mFontSize - sFontSize;
-		addText(new MenuText("Players", x + xOffset, y + yOffset, mFontSize, fontBasic));
+		addText("PLAYERS", new MenuText("Players", x + xOffset, y + yOffset, mFontSize, fontBasic));
 		xOffset += sFontSize * 10;
-		addText(new MenuText("Grid", x + xOffset, y + yOffset, mFontSize, fontBasic));
+		addText("GRID", new MenuText("Grid", x + xOffset, y + yOffset, mFontSize, fontBasic));
 		xOffset += sFontSize * 10 - mFontSize;
-		addText(new MenuText("Timer", x + xOffset, y + yOffset, mFontSize, fontBasic));
+		addText("TIMER", new MenuText("Timer", x + xOffset, y + yOffset, mFontSize, fontBasic));
 		
-		addText(new MenuText("Player and AI Settings", x, y, sFontSize * 2, fontBasic));
-		addText(new MenuText("Grid Settings", x * 2, y + sFontSize * 10, sFontSize * 2, fontBasic));
+		addText("MENU_LABEL_1", new MenuText("Player and AI Settings", x, y, sFontSize * 2, fontBasic));
+		addText("MENU_LABEL_2", new MenuText("Grid Settings", x * 2, y + sFontSize * 10, sFontSize * 2, fontBasic));
 	}
 	
+	// Loads menu buttons and additional sprites.
 	private void loadButtons() {
 		int modifier;
 		int xOffset = 0, yOffset = 0;
@@ -72,10 +75,11 @@ public class OptionState extends MenuState {
 		
 		ChangeButton curButton;
 		for(int i = 0; i < GridConsts.MAX_PLAYERS; i++) {
+			String key = "PLAYER_" + i;
 			xOffset = (i * posScale * 3 - startScale);
 			yOffset = (posScale / -2);
 			
-			addSprite(new Entity(SpriteList.playerSpriteAtIndex(i), x + xOffset, y + yOffset));
+			addSprite(key, new Entity(SpriteList.playerSpriteAtIndex(i), x + xOffset, y + yOffset));
 			
 			yOffset += posScale;
 			curButton = new ChangeButton(this, x + xOffset, y + yOffset, i, 1);
@@ -103,6 +107,8 @@ public class OptionState extends MenuState {
 			
 			addButton(new ChangeButton(this, x + xOffset, y + yOffset, j, modifier));
 		}
+		
+		updatePlayerSprites();
 	}
 
 	private void updateText() {
@@ -118,6 +124,20 @@ public class OptionState extends MenuState {
 		updateText(SPACES, settingText);
 		updateText(TIMER, timerText);
 		*/
+	}
+	
+	// Updates all Player Sprites
+	private void updatePlayerSprites() {
+		for(int i = 0; i < GridConsts.MAX_PLAYERS; i++) {
+			if(GridState.getPlayerP() <= i)
+				updateSpriteAt(i, -1);
+			else
+				updateSpriteAt(i, i);
+		}
+	}
+	
+	public void updateSpriteAt(int index, int playerID) {
+		updateSpriteAt("PLAYER_" + index, SpriteList.playerSpriteAtIndex(playerID));
 	}
 	
 	public void changePlanters() {
