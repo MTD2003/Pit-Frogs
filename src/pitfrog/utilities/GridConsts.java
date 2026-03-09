@@ -10,6 +10,7 @@ public class GridConsts {
 	public static final int HUMAN = 0;
 	public static final int NAIVE_BOT = 1;
 	public static final int SMART_BOT = 2;
+	public static final int RL_AGENT = 3; // Special tag, not selectable in menus.
 	
 	public static final int MIN_PLAYERS = 2;
 	public static final int MAX_PLAYERS = 4;
