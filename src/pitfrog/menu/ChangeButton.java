@@ -3,6 +3,7 @@ package pitfrog.menu;
 import pitfrog.controllers.MenuState;
 import pitfrog.utilities.SpriteList;
 
+// MenuButton (Entity + Interactable) that is used for special actions.
 public class ChangeButton extends MenuButton {
 	private final int index;
 	private final int modifier;

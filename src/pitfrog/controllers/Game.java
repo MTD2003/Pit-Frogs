@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import javax.imageio.ImageIO;
 
+import pitfrog.utilities.GridConsts;
 import pitfrog.utilities.InputMirror;
 import pitfrog.utilities.SpriteList;
 import pitfrog.view.*;
@@ -63,7 +64,6 @@ public class Game implements Runnable {
     	inputs.clearKey();
     }
     
-    // TODO: Include border elements, centered scaling.
     private void draw() {
     	Graphics buffer = panel.getImage().getGraphics(); // Gets the image buffer, then takes the graphics from there.
     	
@@ -119,5 +119,23 @@ public class Game implements Runnable {
     
     public BufferedImage getSprite(int spriteIndex, int imageIndex) {
     	return spriteSheet[spriteIndex][imageIndex];
+    }
+    
+    public State getState() {
+    	return stateNow;
+    }
+    
+    // Necessary RL Agent Functions...
+    // TODO: Could make sense to add another object as an interface to necessary data in the future.
+    
+    // Quick Start function for RL Agent testing.
+    public void agentQuickstart() {
+    	GridState.setPlayerP(2);
+    	GridState.setSizeP(7);
+    	
+    	GridState.setBotFlag(1, GridConsts.RL_AGENT);
+    	GridState.setBotFlag(1, GridConsts.NAIVE_BOT);
+    	
+    	this.stateNow = new GridState(this);
     }
 }
