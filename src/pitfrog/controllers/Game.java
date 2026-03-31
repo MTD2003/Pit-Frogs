@@ -75,17 +75,6 @@ public class Game implements Runnable {
     	this.stateNow = stateNext;
     }
     
-    // Quick Start function for RL Agent testing.
-    public void agentQuickstart() {
-    	GridState.setPlayerP(2);
-    	GridState.setSizeP(7);
-    	
-    	GridState.setBotFlag(1, GridConsts.RL_AGENT);
-    	GridState.setBotFlag(1, GridConsts.NAIVE_BOT);
-    	
-    	this.stateNow = new GridState(this);
-    }
-    
     // Loads all sprites provided in the SpriteList enum.
     private void loadSprites() {
         InputStream curStream;
@@ -130,5 +119,23 @@ public class Game implements Runnable {
     
     public BufferedImage getSprite(int spriteIndex, int imageIndex) {
     	return spriteSheet[spriteIndex][imageIndex];
+    }
+    
+    public State getState() {
+    	return stateNow;
+    }
+    
+    // Necessary RL Agent Functions...
+    // TODO: Could make sense to add another object as an interface to necessary data in the future.
+    
+    // Quick Start function for RL Agent testing.
+    public void agentQuickstart() {
+    	GridState.setPlayerP(2);
+    	GridState.setSizeP(7);
+    	
+    	GridState.setBotFlag(1, GridConsts.RL_AGENT);
+    	GridState.setBotFlag(1, GridConsts.NAIVE_BOT);
+    	
+    	this.stateNow = new GridState(this);
     }
 }

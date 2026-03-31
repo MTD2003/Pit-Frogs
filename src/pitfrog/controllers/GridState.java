@@ -300,6 +300,8 @@ public class GridState implements State {
 		return botFlag[target];
 	}
 	
+	// TODO: Add getter/function for environment features of grid.
+	
 	public static void setPlayerP(int pp) {
 		playerPlanter = checkMinMax(pp, GridConsts.MIN_PLAYERS, GridConsts.MAX_PLAYERS);
 	}
