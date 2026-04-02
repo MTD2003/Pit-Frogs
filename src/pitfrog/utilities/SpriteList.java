@@ -1,5 +1,6 @@
 package pitfrog.utilities;
 
+// Has enumerators connected to specific sprite paths.
 public enum SpriteList {
     SPR_POINTER("/sprites/Pointer.png", 2, 16, 16),
     SPR_GRID_CURSOR("/sprites/grid/Cursor.png", 3, 16, 16),

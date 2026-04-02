@@ -16,6 +16,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+// TODO: Add more functions for interfacing with JPype RL.
 public class GridState implements State {
 	private ArrayList<InteractBox> hitboxes;
 	private final Game gameObj;
@@ -55,7 +56,7 @@ public class GridState implements State {
 		timer = 0;
 		turn = 1;
 		
-		bot = new NaiveAgent(3); // 3 is the optimal distance for a naive agent as it allows it to "see" 2 moves ahead.
+		bot = new NaiveAgent(3); // 3 is the optimal sight for a naive agent as it allows it to "look" 2 full-moves ahead.
 		
 		loadText();
 	}
@@ -299,6 +300,8 @@ public class GridState implements State {
 		return botFlag[target];
 	}
 	
+	// TODO: Add getter/function for environment features of grid.
+	
 	public static void setPlayerP(int pp) {
 		playerPlanter = checkMinMax(pp, GridConsts.MIN_PLAYERS, GridConsts.MAX_PLAYERS);
 	}
@@ -309,5 +312,9 @@ public class GridState implements State {
 	
 	public static void setTimeP(int tp) {
 		timePlanter = checkMinMax(tp, GridConsts.MIN_TIMER, GridConsts.MAX_TIMER);
+	}
+	
+	public static void setBotFlag(int target, int type) {
+		botFlag[target] = type;
 	}
 }
